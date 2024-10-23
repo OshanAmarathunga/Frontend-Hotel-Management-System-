@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 export default function AdminBookings() {
  const [bookingList,setBookingList]=useState([]);
 
- const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MGE2OTgzOGNhMjQ5ZjJkM2E5ZWMwMCIsImVtYWlsIjoib3NoYW45NEBnbWFpbCIsImZpcnN0TmFtZSI6InVzaGFuIiwibGFzdE5hbWUiOiJ1aml0aCIsInR5cGUiOiJhZG1pbiIsImlhdCI6MTcyOTUzNTQ4MCwiZXhwIjoxNzI5NTM5MDgwfQ.rkwDNWU4BqFQMZebZ0y-vWgwlycQlzsWIP8FumXG5JI'
+ const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MGE2OTgzOGNhMjQ5ZjJkM2E5ZWMwMCIsImVtYWlsIjoib3NoYW45NEBnbWFpbCIsImZpcnN0TmFtZSI6InVzaGFuIiwibGFzdE5hbWUiOiJ1aml0aCIsInR5cGUiOiJhZG1pbiIsImlhdCI6MTcyOTY5NDEyNywiZXhwIjoxNzI5Njk3NzI3fQ.cFq3jEuOy02fwjRK_aSxkI3CU9EHGTa4Iby7oskEG94'
  const config={
   headers:{
     Authorization:`Bearer ${token}`,
@@ -25,7 +25,7 @@ export default function AdminBookings() {
     alert(e);
   });
  };
-
+ 
   return (
     <div className="w-full px-4 py-6">
       <h1 className="text-2xl font-semibold mb-6">Admin Bookings</h1>
