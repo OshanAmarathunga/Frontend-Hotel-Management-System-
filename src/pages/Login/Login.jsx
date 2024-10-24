@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import "./login.css";
 import axios from "axios";
 import Swal from 'sweetalert2'
+import { useNavigate } from "react-router-dom";
+import { MdOutlineNotificationsActive } from "react-icons/md";
 
 export default function Login() {
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const [token,setToken]=useState("");
+    const navigate=useNavigate();
 
     function handleLogin(){
       const loginData={
@@ -21,12 +24,21 @@ export default function Login() {
           text: "Login Successful !",
           icon: "success"
         });
-        setToken(result.data.token);
+        localStorage.setItem("token",result.data.token);
         
+        if(result.data.user.type=="admin"){
+          navigate("/admin");
+        }else{
+          navigate("/")
+        }
+
         
+
+
         
+
       }).catch((e)=>{
-        Swal.fire("Invalid login credentials !");
+        Swal.fire("Invalid login credentials, If you have not registered yet, please register!");
       });
       
     }
