@@ -1,8 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Registration() {
+ const [firstName,setFirstName]=useState("");
+ const [lastName,setLastName]=useState("");
+ const [wtNumber,setWtNumber]=useState("");
+ const [mobileNo,setMobileNo]=useState("");
+ const [email,setEmail]=useState("");
+ const [password,setPassword]=useState("");
+
+ function handleSubmit(){
+    const data={
+        firstName:firstName,
+        lastName:lastName,
+        whatsapp:wtNumber,
+        phone:mobileNo,
+        email:email,
+        password:password
+     }
+    
+     axios.post("http://localhost:5000/api/users",data)
+     .then((res)=>{
+
+        console.log(res);
+        
+        Swal.fire({
+            title: "Registration!",
+            text: "Registration Successful !",
+            icon: "success",
+          })
+     })
+     .catch((e)=>{
+        Swal.fire(
+            "Registration fail !"
+          )
+     })
+ }
+
   return (
     <div className=" relative w-ful h-[700px]">
       <img src="b.jpg" className="w-full h-full absolute object-cover" />
@@ -10,25 +47,25 @@ export default function Registration() {
         <h1 className="text-[40px] drop-shadow-lg mb-3 text-blue-50 font-bold">Register with us !</h1>
         <div>
           <div className="mb-3">
-          <TextField sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="First name" variant="filled" />
+          <TextField value={firstName} onChange={(e)=>{setFirstName(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="First name" variant="filled" />
           </div>
           <div className="mb-3">
-          <TextField sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Last name" variant="filled" />
+          <TextField value={lastName} onChange={(e)=>{setLastName(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Last name" variant="filled" />
           </div>
           <div className="mb-3">
-          <TextField sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Whatsapp Number" variant="filled" />
+          <TextField value={wtNumber} onChange={(e)=>{setWtNumber(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Whatsapp Number" variant="filled" />
           </div>
           <div className="mb-3">
-          <TextField sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Mobile no" variant="filled" />
+          <TextField value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Mobile no" variant="filled" />
           </div>
           <div className="mb-3">
-          <TextField sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Email" variant="filled" />
+          <TextField value={email} onChange={(e)=>{setEmail(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Email" variant="filled" />
           </div>
           <div className="mb-3">
-          <TextField sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Password" variant="filled" />
+          <TextField value={password} onChange={(e)=>{setPassword(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Password" variant="filled" />
           </div>
           <div>
-            <button className="bg-blue-400 w-[500px] mt-5 h-9 font-bold hover:bg-blue-800">Submit</button>
+            <button onClick={handleSubmit} className="bg-blue-400 w-[500px] mt-5 h-9 font-bold hover:bg-blue-800">Submit</button>
           </div>
           
         </div>
