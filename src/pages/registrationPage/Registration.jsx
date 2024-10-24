@@ -11,8 +11,15 @@ export default function Registration() {
  const [mobileNo,setMobileNo]=useState("");
  const [email,setEmail]=useState("");
  const [password,setPassword]=useState("");
+ const [error, setError] = useState(false);
 
  function handleSubmit(){
+
+    if(wtNumber==""){
+        setError(true);
+    }else{
+        setError(false);
+    }
     const data={
         firstName:firstName,
         lastName:lastName,
@@ -24,8 +31,14 @@ export default function Registration() {
     
      axios.post("http://localhost:5000/api/users",data)
      .then((res)=>{
-
         console.log(res);
+        
+        setFirstName("");
+        setLastName("");
+        setWtNumber("");
+        setMobileNo("");
+        setEmail("");
+        setPassword("");
         
         Swal.fire({
             title: "Registration!",
@@ -35,15 +48,15 @@ export default function Registration() {
      })
      .catch((e)=>{
         Swal.fire(
-            "Registration fail !"
-          )
+            `Registration fail ! ${e.response.data.error}`
+          );
      })
  }
 
-  return (
+  return ( 
     <div className=" relative w-ful h-[700px]">
       <img src="b.jpg" className="w-full h-full absolute object-cover" />
-      <div className="relative w-[50%] h-full p-8 flex-col backdrop-blur-xl rounded-lg">
+      <div className="relative w-[45%] h-full p-[70px] flex-col backdrop-blur-xl rounded-lg">
         <h1 className="text-[40px] drop-shadow-lg mb-3 text-blue-50 font-bold">Register with us !</h1>
         <div>
           <div className="mb-3">
@@ -53,7 +66,7 @@ export default function Registration() {
           <TextField value={lastName} onChange={(e)=>{setLastName(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Last name" variant="filled" />
           </div>
           <div className="mb-3">
-          <TextField value={wtNumber} onChange={(e)=>{setWtNumber(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Whatsapp Number" variant="filled" />
+          <TextField value={wtNumber} onChange={(e)=>{setWtNumber(e.target.value); wtNumber!=""?setError(false):setError(true);}} error={error} helperText={error ? 'This field cannot be empty' : ''} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Whatsapp Number" variant="filled" />
           </div>
           <div className="mb-3">
           <TextField value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} sx={{bgcolor:"white"}} className="w-[500px]" id="filled-basic" label="Mobile no" variant="filled" />
