@@ -13,6 +13,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 export default function Users() {
   const [userList, setUserList] = useState([]);
+  const options = ["Admin", "Customer"];
+  const [userType, setUserType] = useState(null);
 
   useEffect(() => {
     loadUserTable();
@@ -36,7 +38,7 @@ export default function Users() {
         Users Management
       </h1>
       <div className="p-5 flex">
-        <div className="w-[50%]">
+        <div className="w-[40%]">
           <div className="mb-2">
             <TextField id="filled-basic" label="First Name" variant="filled" />
           </div>
@@ -51,7 +53,7 @@ export default function Users() {
             />
           </div>
         </div>
-        <div className="w-[50%]">
+        <div className="w-[40%]">
           <div className="mb-2">
             <TextField
               id="filled-basic"
@@ -60,17 +62,30 @@ export default function Users() {
             />
           </div>
           <div className="mb-2">
-            <TextField
-              id="filled-basic"
-              label="User Status"
-              variant="filled"
-            />
+            <TextField id="filled-basic" label="User Status" variant="filled" />
           </div>
           <div className="mb-2">
             <TextField
               id="filled-basic"
               label="Email Verified"
               variant="filled"
+            />
+          </div>
+        </div>
+        <div className="w-[20%]">
+          <div className="mb-2">
+            <Autocomplete
+              options={options}
+              value={userType}
+              onChange={(event, newValue) => setUserType(newValue)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="User Type"
+                  variant="outlined"
+                />
+              )}
+              sx={{ width: 200 }}
             />
           </div>
         </div>
