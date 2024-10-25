@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 export default function AdminBookings() {
  const [bookingList,setBookingList]=useState([]);
 
- const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MGE2OTgzOGNhMjQ5ZjJkM2E5ZWMwMCIsImVtYWlsIjoib3NoYW45NEBnbWFpbCIsImZpcnN0TmFtZSI6InVzaGFuIiwibGFzdE5hbWUiOiJ1aml0aCIsInR5cGUiOiJhZG1pbiIsImlhdCI6MTcyOTY5NDEyNywiZXhwIjoxNzI5Njk3NzI3fQ.cFq3jEuOy02fwjRK_aSxkI3CU9EHGTa4Iby7oskEG94'
+ const token=localStorage.getItem("token");
  const config={
   headers:{
     Authorization:`Bearer ${token}`,
@@ -28,9 +28,9 @@ export default function AdminBookings() {
  
   return (
     <div className="w-full px-4 py-6">
-      <h1 className="text-2xl font-semibold mb-6">Admin Bookings</h1>
+      <h1 className="text-2xl font-semibold text-white mb-6">Admin Bookings</h1>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
+        <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
           <thead>
             <tr className="bg-gray-200">
               <th className="text-left px-4 py-2 font-medium text-gray-700">Booking ID</th>
