@@ -1,9 +1,29 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function UserData(props) {
 
   const [savedToken,setSavedToken]=useState(localStorage.getItem("token"));
+  const [name,setName]=useState("");
+
+  
+  const config={
+    headers:{
+      Authorization:`Bearer ${savedToken}`,
+      "content-Type":"application/json"
+    },
+   }
+  if(savedToken!=null){
+    axios.get(import.meta.env.VITE_BACKEND_URL+"/api/users/get-user",config).then((rsp)=>{
+
+      setName(rsp.data.user.firstName);
+      
+    }).catch((e)=>{
+      alert(e)
+      
+    });
+  }
 
   return (
     <div className="absolute right-0 flex items-center">
@@ -14,10 +34,13 @@ function UserData(props) {
       </Link>
 
       <div></div>
-      <img className="rounded-full w-[80px] h-[80px]" src={props.image} />
       <h1 className="text-white ml-[5px] mr-[10px] text-xl cursor-pointer">
-        {props.name}
+        {name}
       </h1>
+      <div className="pr-4">
+      <img className="rounded-full w-[80px] h-[80px]" src={props.image} />
+      </div>
+      
     </div>
   );
 }

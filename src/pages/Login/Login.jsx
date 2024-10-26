@@ -30,7 +30,7 @@ export default function Login() {
         if (result.data.user.type == "admin") {
           navigate("/admin");
         } else {
-          navigate("/");
+          navigate("/home");
         }
       })
       .catch((e) => {

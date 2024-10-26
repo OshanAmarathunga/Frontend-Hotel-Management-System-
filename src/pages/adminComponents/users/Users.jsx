@@ -22,7 +22,7 @@ export default function Users() {
 
   function loadUserTable() {
     axios
-      .get("http://localhost:5000/api/users")
+      .get(import.meta.env.VITE_BACKEND_URL+"/api/users")
       .then((rsp) => {
         console.log(rsp);
 
@@ -40,13 +40,13 @@ export default function Users() {
       <div className="p-5 flex">
         <div className="w-[40%]">
           <div className="mb-2">
-            <TextField id="filled-basic" label="First Name" variant="filled" />
+            <TextField sx={{bgcolor:"white", width:"270px"}} id="filled-basic" label="First Name" variant="filled" />
           </div>
           <div className="mb-2">
-            <TextField id="filled-basic" label="Last Name" variant="filled" />
+            <TextField sx={{bgcolor:"white", width:"270px"}} id="filled-basic" label="Last Name" variant="filled" />
           </div>
           <div className="mb-2">
-            <TextField
+            <TextField sx={{bgcolor:"white", width:"270px"}}
               id="filled-basic"
               label="Whatsapp Number"
               variant="filled"
@@ -55,31 +55,51 @@ export default function Users() {
         </div>
         <div className="w-[40%]">
           <div className="mb-2">
-            <TextField
+            <TextField sx={{bgcolor:"white", width:"270px"}}
               id="filled-basic"
               label="Mobile Number"
               variant="filled"
             />
           </div>
           <div className="mb-2">
-            <TextField id="filled-basic" label="User Status" variant="filled" />
-          </div>
+            <Autocomplete 
+              options={options}
+              value={userType}
+              onChange={(event, newValue) => setUserType(newValue)}
+              renderInput={(params) => (
+                <TextField sx={{bgcolor:"white",width:"270px"}}
+                  {...params}
+                  label="User Status"
+                  variant="outlined"
+                />
+              )}
+              sx={{ width: 200 }}
+            />
+             </div>
           <div className="mb-2">
-            <TextField
-              id="filled-basic"
-              label="Email Verified"
-              variant="filled"
+          <Autocomplete 
+              options={options}
+              value={userType}
+              onChange={(event, newValue) => setUserType(newValue)}
+              renderInput={(params) => (
+                <TextField sx={{bgcolor:"white" ,width:"270px"}}
+                  {...params}
+                  label="Email Verified"
+                  variant="outlined"
+                />
+              )}
+              sx={{ width: 200 }}
             />
           </div>
         </div>
         <div className="w-[20%]">
           <div className="mb-2">
-            <Autocomplete
+            <Autocomplete 
               options={options}
               value={userType}
               onChange={(event, newValue) => setUserType(newValue)}
               renderInput={(params) => (
-                <TextField
+                <TextField sx={{bgcolor:"white"}}
                   {...params}
                   label="User Type"
                   variant="outlined"
