@@ -26,6 +26,7 @@ export default function Users() {
   const [emailVerified, setEmailVerified] = useState(null);
   const [email, setEmail] = useState(null);
   const [updateButton, setUpdateButton] = useState(false);
+  const [password,setPassword]=useState(null);
 
   useEffect(() => {
     loadUserTable();
@@ -51,7 +52,7 @@ export default function Users() {
     setUserStatus("");
     setEmailVerified("");
     setUserType("");
-
+    setPassword("")
   }
 
   function updateUser(user) {
@@ -59,13 +60,13 @@ export default function Users() {
     setLastName(user.lastName);
     setWhatsappNumber(user.whatsapp);
     setMobileNumber(user.phone);
-    setUserStatus(user.disabled==true?"Active":"Disabled");
-    setEmailVerified(user.emailVerified==false?"Not Verified":"Verified");
+    setUserStatus(user.disabled == true ? "Active" : "Disabled");
+    setEmailVerified(user.emailVerified == false ? "Not Verified" : "Verified");
     setUserType(user.type);
     setEmail(user.email);
   }
 
-  function updateUserIntoDatabase(){
+  function updateUserIntoDatabase() {
     const updatedUser = {
       email: email,
       firstName: firstName,
@@ -73,49 +74,89 @@ export default function Users() {
       type: userType,
       whatsapp: whatsappNumber,
       phone: mobileNumber,
-      disabled: userStatus=="Active"?true:false,
-      emailVerified: emailVerified=="Verified"?true:false,
+      disabled: userStatus == "Active" ? true : false,
+      emailVerified: emailVerified == "Verified" ? true : false,
     };
-    
-    axios.put(import.meta.env.VITE_BACKEND_URL+"/api/users",updatedUser).then((rsp)=>{
-      console.log(rsp);
-      loadUserTable();
-      Swal.fire({
-        title: "Updated!",
-        text: "Update Successful !",
-        icon: "success",
-      });
-      clearTextFeilds();
-      setUpdateButton(false);
 
-
-    }).catch((e)=>{
-      Swal.fire({
-        title: "Fail",
-        text: "Update Fail!",
-        icon: "unsuccess",
+    axios
+      .put(import.meta.env.VITE_BACKEND_URL + "/api/users", updatedUser)
+      .then((rsp) => {
+        console.log(rsp);
+        loadUserTable();
+        Swal.fire({
+          title: "Updated!",
+          text: "Update Successful !",
+          icon: "success",
+        });
+        clearTextFeilds();
+        setUpdateButton(false);
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Fail",
+          text: "Update Fail!",
+          icon: "unsuccess",
+        });
       });
-    })
   }
 
-  function deleteUser(user){
-    const email=user.email;
-    
+  function deleteUser(user) {
+    const email = user.email;
 
-      axios.delete(import.meta.env.VITE_BACKEND_URL+"/api/users/"+email).then((rsp)=>{
-        console.log("rsp",rsp);
-        
+    axios
+      .delete(import.meta.env.VITE_BACKEND_URL + "/api/users/" + email)
+      .then((rsp) => {
+        console.log("rsp", rsp);
+
         loadUserTable();
         Swal.fire({
           title: "Deleted!",
           text: "Delete Successful !",
           icon: "success",
         });
-
-      }).catch((e)=>{
-        console.log(e);
-        
       })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function saveUser() {
+    const saveUser = {
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      type: userType,
+      whatsapp: whatsappNumber,
+      phone: mobileNumber,
+      disabled: userStatus == "Active" ? true : false,
+      emailVerified: emailVerified == "Verified" ? true : false,
+      email: email,
+      password:password
+    };
+
+    console.log(saveUser);
+
+    axios
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/users", saveUser)
+      .then((rsp) => {
+        Swal.fire({
+          title: "Saved!",
+          text: "User Saved Successful!",
+          icon: "success",
+        });
+
+        loadUserTable();
+        clearTextFeilds();
+      })
+      .catch((e) => {
+        console.log(e);
+
+        Swal.fire({
+          title: "Fail!",
+          text: "User Saved Failed!",
+          icon: "fail",
+        });
+      });
   }
 
   return (
@@ -182,11 +223,10 @@ export default function Users() {
           <div className="mb-2">
             <Autocomplete
               options={userStatusOptions}
-              value={userStatus   }
-              onChange={(event,newValue) =>{ setUserStatus(newValue)}
-              }
-              
-              
+              value={userStatus}
+              onChange={(event, newValue) => {
+                setUserStatus(newValue);
+              }}
               renderInput={(params) => (
                 <TextField
                   sx={{ bgcolor: "white", width: "270px" }}
@@ -202,15 +242,13 @@ export default function Users() {
             <Autocomplete
               options={emailVerifiedOptions}
               value={emailVerified}
-              onChange={(event,newValue) => setEmailVerified(newValue)} 
-                  
+              onChange={(event, newValue) => setEmailVerified(newValue)}
               renderInput={(params) => (
                 <TextField
                   sx={{ bgcolor: "white", width: "270px" }}
                   {...params}
                   label="Email Verified"
-                  variant="outlined" 
-                  
+                  variant="outlined"
                 />
               )}
               sx={{ width: 200 }}
@@ -234,32 +272,63 @@ export default function Users() {
               sx={{ width: 200 }}
             />
           </div>
-          {/* <div className="mb-2">
-            <TextField
-              sx={{ bgcolor: "white", width: "200px" }}
-              id="filled-basic"
-              label="Email"
-              variant="filled"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              InputLabelProps={{ shrink: Boolean(email) }}
-            />
-          </div> */}
-          {updateButton &&
-           <div>
-            <Button
-              sx={{ bgcolor: "green", m: "2px" }}
-              variant="contained"
-              onClick={() => {
-                updateUserIntoDatabase();
-                clearTextFeilds();
-              }}
-            >
-              Update
-            </Button>
-          </div>}
+          {!updateButton && (
+            <div className="mb-2">
+              <TextField
+                sx={{ bgcolor: "white", width: "200px" }}
+                id="filled-basic"
+                label="Email"
+                variant="filled"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                InputLabelProps={{ shrink: Boolean(email) }}
+              />
+            </div>
+          )}
+          {!updateButton && (
+            <div className="mb-2">
+              <TextField
+                sx={{ bgcolor: "white", width: "200px" }}
+                id="filled-basic"
+                label="Password"
+                variant="filled"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                InputLabelProps={{ shrink: Boolean(email) }}
+              />
+            </div>
+          )}
+          {updateButton && (
+            <div>
+              <Button
+                sx={{ bgcolor: "green", m: "2px" }}
+                variant="contained"
+                onClick={() => {
+                  updateUserIntoDatabase();
+                  clearTextFeilds();
+                }}
+              >
+                Update
+              </Button>
+            </div>
+          )}
+          {!updateButton && (
+            <div>
+              <Button
+                sx={{ bgcolor: "yellow", m: "2px", color: "black" }}
+                variant="contained"
+                onClick={() => {
+                  saveUser();
+                }}
+              >
+                ADD user
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div className="p-5">
@@ -353,7 +422,13 @@ export default function Users() {
                     >
                       Update
                     </Button>
-                    <Button onClick={()=>{deleteUser(row)}} sx={{ bgcolor: "Red" }} variant="contained">
+                    <Button
+                      onClick={() => {
+                        deleteUser(row);
+                      }}
+                      sx={{ bgcolor: "Red" }}
+                      variant="contained"
+                    >
                       Delete
                     </Button>
                   </TableCell>
