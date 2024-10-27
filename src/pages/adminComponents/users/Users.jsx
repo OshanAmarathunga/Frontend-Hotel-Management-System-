@@ -35,8 +35,6 @@ export default function Users() {
     axios
       .get(import.meta.env.VITE_BACKEND_URL + "/api/users")
       .then((rsp) => {
-        console.log(rsp);
-
         setUserList(rsp.data.list);
       })
       .catch((e) => {
@@ -78,8 +76,6 @@ export default function Users() {
       disabled: userStatus=="Active"?true:false,
       emailVerified: emailVerified=="Verified"?true:false,
     };
-    console.log(updatedUser);
-    
     
     axios.put(import.meta.env.VITE_BACKEND_URL+"/api/users",updatedUser).then((rsp)=>{
       console.log(rsp);
@@ -100,6 +96,26 @@ export default function Users() {
         icon: "unsuccess",
       });
     })
+  }
+
+  function deleteUser(user){
+    const email=user.email;
+    
+
+      axios.delete(import.meta.env.VITE_BACKEND_URL+"/api/users/"+email).then((rsp)=>{
+        console.log("rsp",rsp);
+        
+        loadUserTable();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Delete Successful !",
+          icon: "success",
+        });
+
+      }).catch((e)=>{
+        console.log(e);
+        
+      })
   }
 
   return (
@@ -337,7 +353,7 @@ export default function Users() {
                     >
                       Update
                     </Button>
-                    <Button sx={{ bgcolor: "Red" }} variant="contained">
+                    <Button onClick={()=>{deleteUser(row)}} sx={{ bgcolor: "Red" }} variant="contained">
                       Delete
                     </Button>
                   </TableCell>
