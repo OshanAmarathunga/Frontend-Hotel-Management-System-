@@ -3,6 +3,7 @@ import  AdminPage  from "./pages/adminPage/adminPage";
 import HomePage from "./pages/client-page/homePage";
 import Login from "./pages/Login/Login";
 import Registration from "./pages/registrationPage/Registration";
+import Categories from "./pages/client-page/Categories";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Login/>}/>
           <Route path="/*" element={<div>Sorry Not Fount 404</div>}/>
           <Route path="/register" element={<Registration/>}/>
+          <Route path="/categories" element={<Categories/>}/>
         </Routes>
       </BrowserRouter>
     </>
