@@ -10,6 +10,7 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Swal from "sweetalert2";
 
 export default function Users() {
   const [userList, setUserList] = useState([]);
@@ -43,7 +44,15 @@ export default function Users() {
       });
   }
 
-  function clearTextFeilds() {}
+  function clearTextFeilds() {
+    setFirstName("");
+    setLastName("");
+    setWhatsappNumber("");
+    setMobileNumber("");
+    setEmail("");
+    setUserStatus("");
+
+  }
 
   function updateUser(user) {
     setFirstName(user.firstName);
@@ -55,23 +64,35 @@ export default function Users() {
     setUserType(user.type);
     setEmail(user.email);
 
+    
+  }
+  function updateUserIntoDatabase(){
     const updatedUser = {
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      type: user.type,
-      whatsapp: user.whatsapp,
-      phone: user.phone,
-      disabled: user.disabled,
-      emailVerified: user.emailVerified,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      type: userType,
+      whatsapp: whatsappNumber,
+      phone: mobileNumber,
+      disabled: userStatus,
+      emailVerified: emailVerified,
     };
-    // axios.put(import.meta.env.VITE_BACKEND_URL+"/api/users",updatedUser).then((rsp)=>{
-    //   console.log(rsp);
-    //   loadUserTable();
+    
+    axios.put(import.meta.env.VITE_BACKEND_URL+"/api/users",updatedUser).then((rsp)=>{
+      console.log(rsp);
+      loadUserTable();
+      Swal.fire({
+        title: "Updated!",
+        text: "Update Successful !",
+        icon: "success",
+      });
+      clearTextFeilds();
+      setUpdateButton(false);
 
-    // }).catch((e)=>{
-    //   alert(e);
-    // })
+
+    }).catch((e)=>{
+      alert(e);
+    })
   }
 
   return (
@@ -155,7 +176,7 @@ export default function Users() {
             <Autocomplete
               options={emailVerifiedOptions}
               value={emailVerified == false ? "Not Verified" : "Verified"}
-              onChange={(event, newValue) => setEmailVerified(newValue)}
+              onChange={(newValue) => setEmailVerified(newValue.target.value=="Not Verified"?False:ture)}
               renderInput={(params) => (
                 <TextField
                   sx={{ bgcolor: "white", width: "270px" }}
@@ -204,7 +225,8 @@ export default function Users() {
               sx={{ bgcolor: "green", m: "2px" }}
               variant="contained"
               onClick={() => {
-                updateUser(row);
+                updateUserIntoDatabase();
+                clearTextFeilds();
               }}
             >
               Update
