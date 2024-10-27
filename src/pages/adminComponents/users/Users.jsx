@@ -14,7 +14,17 @@ import Autocomplete from "@mui/material/Autocomplete";
 export default function Users() {
   const [userList, setUserList] = useState([]);
   const options = ["Admin", "Customer"];
+  const emailVerifiedOptions = ["Verified", "Not Verified"];
+  const userStatusOptions = ["Active", "Deactive"];
   const [userType, setUserType] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [whatsappNumber, setWhatsappNumber] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState(null);
+  const [userStatus, setUserStatus] = useState(null);
+  const [emailVerified, setEmailVerified] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [updateButton, setUpdateButton] = useState(false);
 
   useEffect(() => {
     loadUserTable();
@@ -22,7 +32,7 @@ export default function Users() {
 
   function loadUserTable() {
     axios
-      .get(import.meta.env.VITE_BACKEND_URL+"/api/users")
+      .get(import.meta.env.VITE_BACKEND_URL + "/api/users")
       .then((rsp) => {
         console.log(rsp);
 
@@ -32,42 +42,107 @@ export default function Users() {
         alert(e);
       });
   }
+
+  function clearTextFeilds() {}
+
+  function updateUser(user) {
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+    setWhatsappNumber(user.whatsapp);
+    setMobileNumber(user.phone);
+    setUserStatus(user.disabled);
+    setEmailVerified(user.emailVerified);
+    setUserType(user.type);
+    setEmail(user.email);
+
+    const updatedUser = {
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      type: user.type,
+      whatsapp: user.whatsapp,
+      phone: user.phone,
+      disabled: user.disabled,
+      emailVerified: user.emailVerified,
+    };
+    // axios.put(import.meta.env.VITE_BACKEND_URL+"/api/users",updatedUser).then((rsp)=>{
+    //   console.log(rsp);
+    //   loadUserTable();
+
+    // }).catch((e)=>{
+    //   alert(e);
+    // })
+  }
+
   return (
     <div>
       <h1 className="text-white font-bold pl-10 pt-5 text-[30px] drop-shadow-lg">
-        Users Management
+        User Management
       </h1>
       <div className="p-5 flex">
         <div className="w-[40%]">
           <div className="mb-2">
-            <TextField sx={{bgcolor:"white", width:"270px"}} id="filled-basic" label="First Name" variant="filled" />
+            <TextField
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              sx={{ bgcolor: "white", width: "270px" }}
+              InputLabelProps={{ shrink: Boolean(firstName) }}
+              value={firstName}
+              id="filled-basic"
+              label="First Name"
+              variant="filled"
+            />
           </div>
           <div className="mb-2">
-            <TextField sx={{bgcolor:"white", width:"270px"}} id="filled-basic" label="Last Name" variant="filled" />
+            <TextField
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              value={lastName}
+              InputLabelProps={{ shrink: Boolean(lastName) }}
+              sx={{ bgcolor: "white", width: "270px" }}
+              id="filled-basic"
+              label="Last Name"
+              variant="filled"
+            />
           </div>
           <div className="mb-2">
-            <TextField sx={{bgcolor:"white", width:"270px"}}
+            <TextField
+              sx={{ bgcolor: "white", width: "270px" }}
               id="filled-basic"
               label="Whatsapp Number"
               variant="filled"
+              onChange={(e) => {
+                setWhatsappNumber(e.target.value);
+              }}
+              value={whatsappNumber}
+              InputLabelProps={{ shrink: Boolean(whatsappNumber) }}
             />
           </div>
         </div>
         <div className="w-[40%]">
           <div className="mb-2">
-            <TextField sx={{bgcolor:"white", width:"270px"}}
+            <TextField
+              sx={{ bgcolor: "white", width: "270px" }}
               id="filled-basic"
               label="Mobile Number"
               variant="filled"
+              onChange={(e) => {
+                setMobileNumber(e.target.value);
+              }}
+              value={mobileNumber}
+              InputLabelProps={{ shrink: Boolean(mobileNumber) }}
             />
           </div>
           <div className="mb-2">
-            <Autocomplete 
-              options={options}
-              value={userType}
+            <Autocomplete
+              options={userStatusOptions}
+              value={userStatus == false ? "Deactive" : "Active"}
               onChange={(event, newValue) => setUserType(newValue)}
               renderInput={(params) => (
-                <TextField sx={{bgcolor:"white",width:"270px"}}
+                <TextField
+                  sx={{ bgcolor: "white", width: "270px" }}
                   {...params}
                   label="User Status"
                   variant="outlined"
@@ -75,14 +150,15 @@ export default function Users() {
               )}
               sx={{ width: 200 }}
             />
-             </div>
+          </div>
           <div className="mb-2">
-          <Autocomplete 
-              options={options}
-              value={userType}
-              onChange={(event, newValue) => setUserType(newValue)}
+            <Autocomplete
+              options={emailVerifiedOptions}
+              value={emailVerified == false ? "Not Verified" : "Verified"}
+              onChange={(event, newValue) => setEmailVerified(newValue)}
               renderInput={(params) => (
-                <TextField sx={{bgcolor:"white" ,width:"270px"}}
+                <TextField
+                  sx={{ bgcolor: "white", width: "270px" }}
                   {...params}
                   label="Email Verified"
                   variant="outlined"
@@ -94,12 +170,13 @@ export default function Users() {
         </div>
         <div className="w-[20%]">
           <div className="mb-2">
-            <Autocomplete 
+            <Autocomplete
               options={options}
               value={userType}
               onChange={(event, newValue) => setUserType(newValue)}
               renderInput={(params) => (
-                <TextField sx={{bgcolor:"white"}}
+                <TextField
+                  sx={{ bgcolor: "white" }}
                   {...params}
                   label="User Type"
                   variant="outlined"
@@ -108,6 +185,31 @@ export default function Users() {
               sx={{ width: 200 }}
             />
           </div>
+          <div className="mb-2">
+            <TextField
+              sx={{ bgcolor: "white", width: "200px" }}
+              id="filled-basic"
+              label="Email"
+              variant="filled"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              InputLabelProps={{ shrink: Boolean(email) }}
+            />
+          </div>
+          {updateButton &&
+           <div>
+            <Button
+              sx={{ bgcolor: "green", m: "2px" }}
+              variant="contained"
+              onClick={() => {
+                updateUser(row);
+              }}
+            >
+              Update
+            </Button>
+          </div>}
         </div>
       </div>
       <div className="p-5">
@@ -147,6 +249,12 @@ export default function Users() {
                   sx={{ fontWeight: "bold", fontSize: "15px" }}
                   align="center"
                 >
+                  Email
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: "bold", fontSize: "15px" }}
+                  align="center"
+                >
                   Status
                 </TableCell>
                 <TableCell
@@ -177,6 +285,7 @@ export default function Users() {
                   <TableCell align="center">{row.type}</TableCell>
                   <TableCell align="center">{row.whatsapp}</TableCell>
                   <TableCell align="center">{row.phone}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
                   <TableCell align="center">
                     {row.disabled ? "Active" : "Disabled"}
                   </TableCell>
@@ -185,8 +294,12 @@ export default function Users() {
                   </TableCell>
                   <TableCell align="center">
                     <Button
-                      sx={{ bgcolor: "green", mx: "5px" }}
+                      sx={{ bgcolor: "green", m: "2px" }}
                       variant="contained"
+                      onClick={() => {
+                        updateUser(row);
+                        setUpdateButton(true);
+                      }}
                     >
                       Update
                     </Button>
