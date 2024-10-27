@@ -16,7 +16,7 @@ export default function Users() {
   const [userList, setUserList] = useState([]);
   const options = ["Admin", "Customer"];
   const emailVerifiedOptions = ["Verified", "Not Verified"];
-  const userStatusOptions = ["Active", "Deactive"];
+  const userStatusOptions = ["Active", "Disabled"];
   const [userType, setUserType] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
@@ -35,8 +35,6 @@ export default function Users() {
     axios
       .get(import.meta.env.VITE_BACKEND_URL + "/api/users")
       .then((rsp) => {
-        console.log(rsp);
-
         setUserList(rsp.data.list);
       })
       .catch((e) => {
@@ -51,6 +49,8 @@ export default function Users() {
     setMobileNumber("");
     setEmail("");
     setUserStatus("");
+    setEmailVerified("");
+    setUserType("");
 
   }
 
@@ -59,13 +59,12 @@ export default function Users() {
     setLastName(user.lastName);
     setWhatsappNumber(user.whatsapp);
     setMobileNumber(user.phone);
-    setUserStatus(user.disabled);
-    setEmailVerified(user.emailVerified);
+    setUserStatus(user.disabled==true?"Active":"Disabled");
+    setEmailVerified(user.emailVerified==false?"Not Verified":"Verified");
     setUserType(user.type);
     setEmail(user.email);
-
-    
   }
+
   function updateUserIntoDatabase(){
     const updatedUser = {
       email: email,
@@ -74,8 +73,8 @@ export default function Users() {
       type: userType,
       whatsapp: whatsappNumber,
       phone: mobileNumber,
-      disabled: userStatus,
-      emailVerified: emailVerified,
+      disabled: userStatus=="Active"?true:false,
+      emailVerified: emailVerified=="Verified"?true:false,
     };
     
     axios.put(import.meta.env.VITE_BACKEND_URL+"/api/users",updatedUser).then((rsp)=>{
@@ -91,8 +90,32 @@ export default function Users() {
 
 
     }).catch((e)=>{
-      alert(e);
+      Swal.fire({
+        title: "Fail",
+        text: "Update Fail!",
+        icon: "unsuccess",
+      });
     })
+  }
+
+  function deleteUser(user){
+    const email=user.email;
+    
+
+      axios.delete(import.meta.env.VITE_BACKEND_URL+"/api/users/"+email).then((rsp)=>{
+        console.log("rsp",rsp);
+        
+        loadUserTable();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Delete Successful !",
+          icon: "success",
+        });
+
+      }).catch((e)=>{
+        console.log(e);
+        
+      })
   }
 
   return (
@@ -159,8 +182,11 @@ export default function Users() {
           <div className="mb-2">
             <Autocomplete
               options={userStatusOptions}
-              value={userStatus == false ? "Deactive" : "Active"}
-              onChange={(event, newValue) => setUserType(newValue)}
+              value={userStatus   }
+              onChange={(event,newValue) =>{ setUserStatus(newValue)}
+              }
+              
+              
               renderInput={(params) => (
                 <TextField
                   sx={{ bgcolor: "white", width: "270px" }}
@@ -175,14 +201,16 @@ export default function Users() {
           <div className="mb-2">
             <Autocomplete
               options={emailVerifiedOptions}
-              value={emailVerified == false ? "Not Verified" : "Verified"}
-              onChange={(newValue) => setEmailVerified(newValue.target.value=="Not Verified"?False:ture)}
+              value={emailVerified}
+              onChange={(event,newValue) => setEmailVerified(newValue)} 
+                  
               renderInput={(params) => (
                 <TextField
                   sx={{ bgcolor: "white", width: "270px" }}
                   {...params}
                   label="Email Verified"
-                  variant="outlined"
+                  variant="outlined" 
+                  
                 />
               )}
               sx={{ width: 200 }}
@@ -206,7 +234,7 @@ export default function Users() {
               sx={{ width: 200 }}
             />
           </div>
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <TextField
               sx={{ bgcolor: "white", width: "200px" }}
               id="filled-basic"
@@ -218,7 +246,7 @@ export default function Users() {
               }}
               InputLabelProps={{ shrink: Boolean(email) }}
             />
-          </div>
+          </div> */}
           {updateButton &&
            <div>
             <Button
@@ -325,7 +353,7 @@ export default function Users() {
                     >
                       Update
                     </Button>
-                    <Button sx={{ bgcolor: "Red" }} variant="contained">
+                    <Button onClick={()=>{deleteUser(row)}} sx={{ bgcolor: "Red" }} variant="contained">
                       Delete
                     </Button>
                   </TableCell>
