@@ -27,7 +27,7 @@ export default function Login() {
         });
         localStorage.setItem("token", result.data.token);
 
-        if (result.data.user.type == "admin") {
+        if (result.data.user.type == "Admin") {
           navigate("/admin");
         } else {
           navigate("/home");
