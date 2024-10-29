@@ -19,7 +19,7 @@ export default function Rooms() {
   return (
     <div>
       <input  onChange={(e)=>{setFile(e.target.files[0])}} type="file"/>
-      <button  onClick={handleFileUpload}>submit</button>
+      <button  onClick={()=>handleFileUpload()}>submit</button>
     </div>
     
   )

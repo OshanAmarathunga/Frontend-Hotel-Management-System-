@@ -13,7 +13,6 @@ export default async function uploadMedia(file){
     try{
         const snapshot=await uploadBytes(fileRef,file);
         const url =await getDownloadURL(snapshot.ref);
-        console.log(url);
         return url;
     }
     catch(e){
