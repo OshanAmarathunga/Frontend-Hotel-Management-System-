@@ -11,6 +11,22 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Swal from "sweetalert2";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import uploadMedia from "../../../utils/mediaUpload";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 export default function Users() {
   const [userList, setUserList] = useState([]);
@@ -26,7 +42,30 @@ export default function Users() {
   const [emailVerified, setEmailVerified] = useState(null);
   const [email, setEmail] = useState(null);
   const [updateButton, setUpdateButton] = useState(false);
-  const [password,setPassword]=useState(null);
+  const [password, setPassword] = useState(null);
+  const [url,setUrl]=useState(null);
+
+  const [file, setFile] = useState(null);
+  const handleFileUpload = async () => {
+    if (file) {
+      const url = await uploadMedia(file);
+      if (url) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Image uploaded !",
+          showConfirmButton: false,
+          timer: 3500,
+        });
+        console.log("File uplaod success ", url);
+        setFile(null);
+        setUrl(url);
+      } else {
+        Swal.fire("Upload image Fail !");
+      }
+    } else {
+    }
+  };
 
   useEffect(() => {
     loadUserTable();
@@ -52,7 +91,7 @@ export default function Users() {
     setUserStatus("");
     setEmailVerified("");
     setUserType("");
-    setPassword("")
+    setPassword("");
   }
 
   function updateUser(user) {
@@ -131,10 +170,11 @@ export default function Users() {
       disabled: userStatus == "Active" ? true : false,
       emailVerified: emailVerified == "Verified" ? true : false,
       email: email,
-      password:password
+      password: password,
+      img:url
     };
 
-    console.log(saveUser);
+    console.log("saveUser : ",saveUser);
 
     axios
       .post(import.meta.env.VITE_BACKEND_URL + "/api/users", saveUser)
@@ -161,6 +201,19 @@ export default function Users() {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+      />
       <h1 className="text-white font-bold pl-10 pt-5 text-[30px] drop-shadow-lg">
         User Management
       </h1>
@@ -238,7 +291,7 @@ export default function Users() {
               sx={{ width: 200 }}
             />
           </div>
-          <div className="mb-2">
+          <div className="mb-4">
             <Autocomplete
               options={emailVerifiedOptions}
               value={emailVerified}
@@ -253,6 +306,31 @@ export default function Users() {
               )}
               sx={{ width: 200 }}
             />
+          </div>
+          <div className="mb-2 mt-2">
+            
+            {!file && <label className="px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
+              Choose File
+              <input
+                type="file"
+                className="hidden"
+                onChange={(event) => {
+                  setFile(event.target.files[0]);
+                }}
+              />
+            </label>}
+            {file && <span className="text-sm text-white">{file.name}</span>}
+            {file && <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
+              onClick={() => handleFileUpload()}
+              
+            >
+              Upload User Image
+            </Button>}
           </div>
         </div>
         <div className="w-[20%]">
@@ -272,6 +350,7 @@ export default function Users() {
               sx={{ width: 200 }}
             />
           </div>
+
           {!updateButton && (
             <div className="mb-2">
               <TextField
