@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineNotificationsActive } from "react-icons/md";
+import GoogleLogin from "./GoogleLogin";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -66,18 +67,22 @@ export default function Login() {
         <div className="relative w-full h-[100vh] ">
           <button
             onClick={handleLogin}
-            className="absolute left-[14%] w-[70%] hover:bg-blue-900 bg-blue-500 text-white h-[40px] bottom-[10px]"
+            className="font-medium absolute left-[14%] w-[70%] hover:bg-blue-900 bg-blue-500 text-white h-[40px] bottom-[10px]"
           >
             Login
           </button>
         </div>
+        <div class="relative w-full h-[100vh]">
+          <GoogleLogin/>
+        </div>
+
         <div className="relative w-full h-[100vh] ">
           <Link to={"/register"}>
-            <button className="absolute left-[14%] w-[70%] hover:bg-red-600 bg-red-500 h-[40px]">
+            <button className="font-medium absolute bottom-[10px] left-[14%] w-[70%] hover:bg-red-600 bg-red-500 h-[40px]">
               Register
             </button>
           </Link>
-          s
+          
         </div>
       </div>
     </div>
