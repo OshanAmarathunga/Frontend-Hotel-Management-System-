@@ -201,19 +201,7 @@ export default function Users() {
 
   return (
     <div>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition:Bounce
-      />
+      
       <h1 className="text-white font-bold pl-10 pt-5 text-[30px] drop-shadow-lg">
         User Management
       </h1>
@@ -230,6 +218,7 @@ export default function Users() {
               id="filled-basic"
               label="First Name"
               variant="filled"
+              
             />
           </div>
           <div className="mb-2">
@@ -491,7 +480,7 @@ export default function Users() {
                     {row.emailVerified ? "Verified" : "Not Verified"}
                   </TableCell>
                   <TableCell align="center">
-                    <Button
+                    <div className="flex"><Button
                       sx={{ bgcolor: "green", m: "2px" }}
                       variant="contained"
                       onClick={() => {
@@ -505,11 +494,11 @@ export default function Users() {
                       onClick={() => {
                         deleteUser(row);
                       }}
-                      sx={{ bgcolor: "Red" }}
+                      sx={{ bgcolor: "Red",m: "2px"  }}
                       variant="contained"
                     >
                       Delete
-                    </Button>
+                    </Button></div>
                   </TableCell>
                 </TableRow>
               ))}
