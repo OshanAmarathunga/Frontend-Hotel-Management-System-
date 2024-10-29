@@ -72,7 +72,7 @@ export default function Login() {
             Login
           </button>
         </div>
-        <div class="relative w-full h-[100vh]">
+        <div className="relative w-full h-[100vh]">
           <GoogleLogin/>
         </div>
 

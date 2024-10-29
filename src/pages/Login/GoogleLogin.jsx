@@ -16,10 +16,10 @@ export default function GoogleLogin() {
         })
     }
   return (
-    <div>
-        <button onClick={googleLogin}  class="absolute left-[14%] w-[70%] flex items-center justify-center hover:bg-gray-400 bg-white text-white h-[40px] bottom-[35px] rounded-md shadow-md transition duration-300 ease-in-out">
-            <img src="icon.png" alt="Google Icon" class="w-5 h-5 mr-2"  />
-            <span class="text-gray-700 font-medium">Sign in with Google</span>
+    <div >
+        <button onClick={googleLogin}  className="absolute left-[14%] w-[70%] flex items-center justify-center hover:bg-gray-400 bg-white text-white h-[40px] bottom-[35px] rounded-md shadow-md transition duration-300 ease-in-out">
+            <img src="icon.png" alt="Google Icon" className="w-5 h-5 mr-2"  />
+            <span className="text-gray-700 font-medium">Sign in with Google</span>
           </button>
       
     </div>
