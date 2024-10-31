@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,31 +6,56 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-export default function CardComponent() {
+export default function CardComponent(prop) {
   return (
     <div>
-        <Card sx={{ maxWidth: 1200 }}>
-          <CardMedia
-            component="img"
-            alt="green iguana"
-            height="140"
-            image="/static/images/cards/contemplative-reptile.jpg"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
       
+      <Card sx={{ maxWidth: 1200 }}>
+        <div className="flex">
+        <div>
+        <CardMedia
+          component="img"
+          alt="green iguana"
+          height="140"
+          
+          image={prop.image}
+          sx={{width:"300px"}}
+        />
+        </div>
+        
+        <div>
+        <CardContent>
+          <Typography gutterBottom variant="h7" component="div">
+            {prop.roomID}
+          </Typography>
+          <Typography gutterBottom variant="h5" component="div">
+            {prop.roomName}
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            Number of guests : {prop.maxGuests}
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            Category : {prop.category}
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            Status : {prop.availability}
+          </Typography>
+
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            {prop.description}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button variant="contained" size="small" color="success">
+            Update
+          </Button>
+          <Button variant="contained" size="small" color="warning">
+            Delete
+          </Button>
+        </CardActions>
+        </div>
+        </div>
+      </Card>
     </div>
-  )
+  );
 }

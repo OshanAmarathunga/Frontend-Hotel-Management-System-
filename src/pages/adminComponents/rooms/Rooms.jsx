@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CardComponent from "./Card";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 export default function Rooms() {
   return (
@@ -11,11 +12,7 @@ export default function Rooms() {
       <div className="pl-10 pt-4 flex space-x-20">
         <div className="space-y-3">
           <div>
-            <TextField
-              id="outlined-basic"
-              label="Room ID"
-              variant="outlined"
-            />
+            <TextField id="outlined-basic" label="Room ID" variant="outlined" />
           </div>
           <div>
             <TextField
@@ -41,11 +38,7 @@ export default function Rooms() {
         </div>
         <div className="space-y-3">
           <div>
-            <TextField
-              id="outlined-basic"
-              label="Image"
-              variant="outlined"
-            />
+            <TextField id="outlined-basic" label="Image" variant="outlined" />
           </div>
           <div>
             <TextField
@@ -62,20 +55,25 @@ export default function Rooms() {
             />
           </div>
           <div>
-            <TextField
-              id="outlined-basic"
-              label="Notes"
-              variant="outlined"
-            />
+            <TextField id="outlined-basic" label="Notes" variant="outlined" />
           </div>
         </div>
         <div className="space-y-3">
-          <h1>button</h1>
+          <div>
+            <Button variant="contained" color="success">
+              Add Room
+            </Button>
+          </div>
+          <div>
+            <Button variant="contained" color="warning">
+              Update Room
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="p-10">
-        <CardComponent />
+        <CardComponent roomID={"R001"} roomName={"Family Pack"} description={"description"} maxGuests={"4"} category={"luxury"} availability={"yes"} image={"image"} />
       </div>
     </div>
   );
