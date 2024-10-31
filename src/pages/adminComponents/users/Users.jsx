@@ -202,7 +202,7 @@ export default function Users() {
   return (
     <div>
       
-      <h1 className="text-white font-bold pl-10 pt-5 text-[30px] drop-shadow-lg">
+      <h1 className="text-blue-800 font-bold pl-10 pt-5 text-[30px] drop-shadow-lg">
         User Management
       </h1>
       <div className="p-5 flex">
