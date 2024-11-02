@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardComponent from "./Card";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -11,18 +11,19 @@ import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 
 export default function Rooms() {
-  const [roomId, setRoomId] = useState(null);
-  const [roomName, setRoomName] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [maxGuests, setMaxGuests] = useState(null);
+  const [roomId, setRoomId] = useState("");
+  const [roomName, setRoomName] = useState("");
+  const [description, setDescription] = useState("");
+  const [maxGuests, setMaxGuests] = useState("");
   const [imageList, setImageList] = useState([]);
-  const [availability, setAvailability] = useState(null);
-  const [category, setCategory] = useState(null);
-  const [note, setNote] = useState(null);
+  const [availability, setAvailability] = useState("");
+  const [category, setCategory] = useState("");
+  const [note, setNote] = useState("");
   const availableOptions = ["Available", "Not Available"];
   const categoryOptions = ["Luxury", "Delux", "Family", "Couple", "Honeymoon"];
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState("");
   const [urlList, setUrlList] = useState([]);
+  const [roomList, setRoomList] = useState([]);
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
@@ -76,11 +77,11 @@ export default function Rooms() {
     setImageList((prevList) => prevList.filter((_, i) => i !== index));
   };
   const token = localStorage.getItem("token");
-  const config={
-    headers:{
-      Authorization :`Bearer ${token}`
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  }
+  };
 
   function saveNewRoom() {
     const data = {
@@ -88,23 +89,43 @@ export default function Rooms() {
       name: roomName,
       specialDescription: description,
       maximumGuests: maxGuests,
-      photo: imageList,
-      available: availability=="Available"?true:false,
+      photo: urlList,
+      available: availability == "Available" ? true : false,
       category: category,
       notes: note,
     };
-    console.log("data : ", data);
-    
 
     axios
-      .post(import.meta.env.VITE_BACKEND_URL + "/api/room", data,config)
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/room", data, config)
       .then((rsp) => {
-        console.log("rsp ", rsp);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Room Saved ! ",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        loadRoomList();
       })
       .catch((e) => {
         alert("save Error");
       });
   }
+
+  useEffect(() => {
+    loadRoomList();
+  }, []);
+
+  const loadRoomList = () => {
+    axios
+      .get(import.meta.env.VITE_BACKEND_URL + "/api/room")
+      .then((rsp) => {
+        setRoomList(rsp.data.allRoomsList);
+      })
+      .catch((e) => {
+        alert("error");
+      });
+  };
 
   return (
     <div>
@@ -221,8 +242,8 @@ export default function Rooms() {
           </div>
           <div>
             <Autocomplete
-              onChange={(e,newValue) => {
-                setAvailability(newValue)
+              onChange={(e, newValue) => {
+                setAvailability(newValue);
               }}
               value={availability}
               disablePortal
@@ -237,14 +258,24 @@ export default function Rooms() {
               disablePortal
               options={categoryOptions}
               value={category}
-              onChange={(e,newValue)=>{setCategory(newValue)}}
+              onChange={(e, newValue) => {
+                setCategory(newValue);
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Category" />
               )}
             />
           </div>
           <div className="w-[100%]">
-            <TextField value={note} onChange={(e)=>{setNote(e.target.value)}} id="outlined-basic" label="Notes" variant="outlined" />
+            <TextField
+              value={note}
+              onChange={(e) => {
+                setNote(e.target.value);
+              }}
+              id="outlined-basic"
+              label="Notes"
+              variant="outlined"
+            />
           </div>
         </div>
         <div className="space-y-3">
@@ -260,18 +291,24 @@ export default function Rooms() {
           </div>
         </div>
       </div>
-
-      <div className="p-10">
-        <CardComponent
-          roomID={"R001"}
-          roomName={"Family Pack"}
-          description={"description"}
-          maxGuests={"4"}
-          category={"luxury"}
-          availability={"yes"}
-          image={"image"}
-        />
-      </div>
+      
+      {roomList &&
+        roomList.map((room) => (
+          <div key={room.roomId}  className="p-2">
+            <CardComponent
+            
+              roomID={room.roomId}
+              roomName={room.name}
+              description={room.specialDescription}
+              maxGuests={room.maximumGuests}
+              category={room.category}
+              availability={room.available}
+              image={room.photo}
+            />
+            </div>
+          
+        ))}
+        
     </div>
   );
 }
