@@ -29,7 +29,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function Users() {
-  const [userList, setUserList] = useState([]);
+  const [ userList, setUserList] = useState([]);
   const options = ["Admin", "Customer"];
   const emailVerifiedOptions = ["Verified", "Not Verified"];
   const userStatusOptions = ["Active", "Disabled"];
