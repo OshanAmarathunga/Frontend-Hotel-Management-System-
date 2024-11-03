@@ -19,7 +19,7 @@ export default function CardComponent(prop) {
                   alt="green iguana"
                   height="140"
                   image={image}
-                  sx={{ width: "300px", height: "200px", objectFit: "cover", padding:"10px", borderRadius:"20px"  }}
+                  sx={{ width: "300px", height: "230px", objectFit: "cover", padding:"10px", borderRadius:"20px"  }}
                 />
               </div>
             ))}

@@ -195,7 +195,7 @@ export default function Rooms() {
             <div className="flex">
               <label className=" px-2 py-2 h-9  bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
                 SELECT IMAGE
-                <input
+                <input 
                   type="file"
                   className="hidden"
                   multiple
