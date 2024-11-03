@@ -1,83 +1,88 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import uploadMedia from "../../../utils/mediaUpload";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 export default function AddCategory() {
-    // const [category, setCategory] = useState({
-    //     name: '',
-    //     description: '',
-    //     price: 0,
-    //     features: [''],
-    //     image: ''
-    //   });
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [features, setFeaturesList] = useState([]);
+  const [image, setImage] = useState("");
 
-      const [name, setName]=useState("");
-      const [description,setDescription]=useState("");
-      const [price,setPrice]=useState(0);
-      const [features,setFeaturesList]=useState([]);
-      const [image ,setImage]=useState("");
+  const handleFeatureChange = (index, value) => {
+    setFeaturesList((prv) => {
+      const updatedFeatures = [...prv];
+      updatedFeatures[index] = value;
+      return updatedFeatures;
+    });
+  };
 
-    //   const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setCategory((prevCategory) => ({
-    //       ...prevCategory,
-    //       [name]: value
-    //     }));
-    //   };
+  const addFeature = () => {
+    setFeaturesList((prevFeatures) => [...prevFeatures, ""]);
+  };
 
-    //   const handleFeatureChange = (index, value) => {
-    //     const updatedFeatures = [...category.features];
-    //     updatedFeatures[index] = value;
-    //     setCategory((prevCategory) => ({    
-    //       ...prevCategory,
-    //       features: updatedFeatures
-    //     }));
-    //   };
+  const removeFeature = (index) => {
+    setFeaturesList((prevFeatures) =>
+      prevFeatures.filter((_, i) => i !== index)
+    );
+  };
 
-    //   const addFeature = () => {
-    //     setCategory((prevCategory) => ({
-    //       ...prevCategory,
-    //       features: [...prevCategory.features, '']
-    //     }));
-    //   };
+  const handleImageChange = async (e) => {
+    const image = e.target.files[0];
+    const url = await uploadMedia(image);
+    if (url) {
+      setImage(url);
+      toast.success("Successfully Uploaded!");
+    }
+  };
 
-    //   const removeFeature = (index) => {
-    //     const updatedFeatures = category.features.filter((_, i) => i !== index);
-    //     setCategory((prevCategory) => ({
-    //       ...prevCategory,
-    //       features: updatedFeatures
-    //     }));
-    //   };
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
-    //   const handleImageChange = (e) => {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //       const reader = new FileReader();
-    //       reader.onload = () => {
-    //         setCategory((prevCategory) => ({
-    //           ...prevCategory,
-    //           image: reader.result
-    //         }));
-    //       };
-    //       reader.readAsDataURL(file);
-    //     }
-    //   };
+  function clearText() {
+    setName(""), setDescription("");
+    setPrice("");
+    setFeaturesList([]), setImage("");
+  }
 
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        toast.success('Successfully toasted!');
-        // try {
-        //   await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/category", category);
-        //   alert("Category added successfully!");
-        //   setCategory({ name: '', description: '', price: 0, features: [''], image: '' });
-        // } catch (error) {
-        //   alert("Failed to add category!");
-        // }
-      };
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const category = {
+      name: name,
+      description: description,
+      price: price,
+      features: features,
+      image: image,
+    };
+    
+    try {
+      const rsp=await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/category",
+        category,
+        config
+      );
+      console.log("Rsp : ",rsp);
+      
+      toast.success("Successfully Added this Category");
+      clearText();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Add New Category</h2>
+    <div className="max-w-md mx-auto p-6 bg-white shadow-lg mt-3 rounded-lg">
+      <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+        Add New Category
+      </h2>
+      <div>
+        <Toaster position="top-right" />
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-600 mb-1">Name:</label>
@@ -85,7 +90,9 @@ export default function AddCategory() {
             type="text"
             name="name"
             value={name}
-            onChange={(e)=>{setName(e.target.value)}}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             required
           />
@@ -96,7 +103,9 @@ export default function AddCategory() {
           <textarea
             name="description"
             value={description}
-            onChange={(e)=>{setDescription(e.target.value)}}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
@@ -107,7 +116,9 @@ export default function AddCategory() {
             type="number"
             name="price"
             value={price}
-            onChange={(e)=>{setPrice(e.target.value)}}
+            onChange={(e) => {
+              setPrice(Number(e.target.value));
+            }}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             required
           />
@@ -115,23 +126,24 @@ export default function AddCategory() {
 
         <div>
           <label className="block text-gray-600 mb-1">Features:</label>
-          {features && features.map((feature, index) => (
-            <div key={index} className="flex items-center space-x-2 mb-2">
-              <input
-                type="text"
-                value={feature}
-                onChange={(e) => handleFeatureChange(index, e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-              <button
-                type="button"
-                onClick={() => removeFeature(index)}
-                className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+          {features &&
+            features.map((feature, index) => (
+              <div key={index} className="flex items-center space-x-2 mb-2">
+                <input
+                  type="text"
+                  value={feature}
+                  onChange={(e) => handleFeatureChange(index, e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFeature(index)}
+                  className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
           <button
             type="button"
             onClick={addFeature}
@@ -149,9 +161,10 @@ export default function AddCategory() {
             onChange={handleImageChange}
             className="w-full px-4 py-2 border rounded-lg"
           />
-          {category.image && (
+
+          {image && (
             <img
-              src={category.image}
+              src={image}
               alt="Preview"
               className="w-24 h-24 mt-4 rounded-lg object-cover"
             />
@@ -166,5 +179,5 @@ export default function AddCategory() {
         </button>
       </form>
     </div>
-  )
+  );
 }
