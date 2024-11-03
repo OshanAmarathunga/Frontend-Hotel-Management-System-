@@ -7,7 +7,7 @@ const storage = getStorage(firebaseApp, "gs://hotel-management-89-bae73.appspot.
 
 export default async function uploadMedia(file){
     if(file==null){
-        return
+        return 
     }
     const fileRef=ref(storage,file.name);
     try{

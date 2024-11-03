@@ -11,6 +11,7 @@ import Users from "../adminComponents/users/Users";
 import Feedback from "../adminComponents/feedbacks/Feedback";
 import GalleryItems from "../adminComponents/galleryitems/GalleryItems";
 import Rooms from "../adminComponents/rooms/Rooms";
+import AddCategory from "../adminComponents/category/addCategory";
 
 export default function AdminPage() {
   const navigate=useNavigate();
@@ -54,10 +55,12 @@ export default function AdminPage() {
           <Routes>
             <Route path="/bookings" element={<AdminBookings/>}/>
             <Route path="/categories" element={<Categories/>}/>
+            <Route path="/addNewCategory" element={<AddCategory/>}/>
             <Route path="/rooms" element={<Rooms/>}/>
             <Route path="/users" element={<Users/>}/>
             <Route path="/feedback" element={<Feedback/>}/>
             <Route path="/galleryItem" element={<GalleryItems/>}/>
+            
           </Routes>
         </div>
       </div>
