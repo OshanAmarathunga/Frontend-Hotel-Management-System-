@@ -65,12 +65,12 @@ export default function UpdateCategory() {
       image: image,
     };
     try {
-      const rsp=await axios.post(
-        import.meta.env.VITE_BACKEND_URL + "/api/category",
+      const rsp=await axios.put(
+        import.meta.env.VITE_BACKEND_URL + `/api/category/${name}`, 
         category,
         config
       );
-      toast.success("Successfully Added this Category");
+      toast.success("Successfully updated this Category !");
       clearText();
     } catch (error) {
       console.log(error);
@@ -97,6 +97,7 @@ export default function UpdateCategory() {
             }}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             required
+            disabled
           />
         </div>
 
