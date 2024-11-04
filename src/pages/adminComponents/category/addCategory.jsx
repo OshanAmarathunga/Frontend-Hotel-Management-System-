@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import uploadMedia from "../../../utils/mediaUpload";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function AddCategory() {
   const [name, setName] = useState("");
@@ -9,6 +11,13 @@ export default function AddCategory() {
   const [price, setPrice] = useState("");
   const [features, setFeaturesList] = useState([]);
   const [image, setImage] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleFeatureChange = (index, value) => {
     setFeaturesList((prv) => {
@@ -29,11 +38,13 @@ export default function AddCategory() {
   };
 
   const handleImageChange = async (e) => {
+    handleOpen();
     const image = e.target.files[0];
     const url = await uploadMedia(image);
     if (url) {
       setImage(url);
       toast.success("Successfully Uploaded!");
+      handleClose();
     }
   };
 
@@ -74,6 +85,15 @@ export default function AddCategory() {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-lg mt-3 rounded-lg">
+      <div>
+        <Backdrop
+          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+          open={open}
+          onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
       <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
         Add New Category
       </h2>

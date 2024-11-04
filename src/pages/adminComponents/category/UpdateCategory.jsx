@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import uploadMedia from "../../../utils/mediaUpload";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function UpdateCategory() {
-    const location=useLocation();
+
+ const location=useLocation();
   const [name, setName] = useState(location.state.name);
   const [description, setDescription] = useState(location.state.description);
   const [price, setPrice] = useState(location.state.price);
   const [features, setFeaturesList] = useState(location.state.features);
   const [image, setImage] = useState(location.state.image);
- 
+  const [open, setOpen] = React.useState(false);
+  const navigate=useNavigate();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const token = localStorage.getItem("token");
+  useEffect(()=>{
+
+    if(token==null){
+        navigate("/admin/categories");
+      }
+  },[])
 
   
 
@@ -34,15 +52,18 @@ export default function UpdateCategory() {
   };
 
   const handleImageChange = async (e) => {
+    handleOpen();
     const image = e.target.files[0];
     const url = await uploadMedia(image);
     if (url) {
       setImage(url);
+      handleClose();
       toast.success("Successfully Uploaded!");
+
     }
   };
 
-  const token = localStorage.getItem("token");
+  
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -70,6 +91,7 @@ export default function UpdateCategory() {
         category,
         config
       );
+      
       toast.success("Successfully updated this Category !");
       clearText();
     } catch (error) {
@@ -79,6 +101,15 @@ export default function UpdateCategory() {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-lg mt-3 rounded-lg">
+        <div>
+        <Backdrop
+          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+          open={open}
+          onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
       <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
         Update Category
       </h2>
