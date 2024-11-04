@@ -69,7 +69,7 @@ export default function Categories() {
       >
         <thead>
           <tr style={{ backgroundColor: "#4CAF50", color: "white" }}>
-            <th style={{ padding: "12px", border: "1px solid #ddd" }}>ID</th>
+            
             <th style={{ padding: "12px", border: "1px solid #ddd" }}>Name</th>
             <th style={{ padding: "12px", border: "1px solid #ddd" }}>
               Description
@@ -91,7 +91,7 @@ export default function Categories() {
                 key={category.id}
                 style={{ textAlign: "center", borderBottom: "1px solid #ddd" }}
               >
-                <td style={{ padding: "12px" }}>{category.id}</td>
+                
                 <td style={{ padding: "12px" }}>{category.name}</td>
                 <td style={{ padding: "12px" }}>
                   {category.description || "N/A"}
