@@ -6,7 +6,7 @@ import axios from "axios";
 export default function AddCategory() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [features, setFeaturesList] = useState([]);
   const [image, setImage] = useState("");
 
@@ -59,15 +59,12 @@ export default function AddCategory() {
       features: features,
       image: image,
     };
-    
     try {
       const rsp=await axios.post(
         import.meta.env.VITE_BACKEND_URL + "/api/category",
         category,
         config
       );
-      console.log("Rsp : ",rsp);
-      
       toast.success("Successfully Added this Category");
       clearText();
     } catch (error) {
