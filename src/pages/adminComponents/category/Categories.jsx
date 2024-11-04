@@ -129,7 +129,8 @@ export default function Categories() {
                 </td>
                 <td style={{ padding: "12px" }}>
                   <button
-                    onClick={() => handleUpdate(category.name)}
+                    onClick={() => navigate("/admin/updateCategory",{state:category})}
+                    
                     style={{
                       backgroundColor: "#4CAF50",
                       color: "white",
