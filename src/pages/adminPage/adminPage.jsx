@@ -13,6 +13,8 @@ import GalleryItems from "../adminComponents/galleryitems/GalleryItems";
 import Rooms from "../adminComponents/rooms/Rooms";
 import AddCategory from "../adminComponents/category/addCategory";
 import UpdateCategory from "../adminComponents/category/UpdateCategory";
+import AddGalleryItem from "../adminComponents/galleryitems/AddGalleryItem";
+import UpdateGalleryItem from "../adminComponents/galleryitems/UpdateGalleryItem";
 
 export default function AdminPage() {
   const navigate=useNavigate();
@@ -62,6 +64,8 @@ export default function AdminPage() {
             <Route path="/users" element={<Users/>}/>
             <Route path="/feedback" element={<Feedback/>}/>
             <Route path="/galleryItem" element={<GalleryItems/>}/>
+            <Route path="/addNewGalleryItem" element={<AddGalleryItem/>}/>
+            <Route path="/updateGalleryItem" element={<UpdateGalleryItem/>}/>
             
           </Routes>
         </div>
