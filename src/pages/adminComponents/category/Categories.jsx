@@ -130,29 +130,14 @@ export default function Categories() {
                 <td style={{ padding: "12px" }}>
                   <button
                     onClick={() => navigate("/admin/updateCategory",{state:category})}
+                    className="font-bold shadow-lg bg-green-300 m-2 hover:bg-green-600 border-none p-2 rounded-md"
                     
-                    style={{
-                      backgroundColor: "#4CAF50",
-                      color: "white",
-                      border: "none",
-                      padding: "8px 12px",
-                      cursor: "pointer",
-                      marginRight: "8px",
-                      borderRadius: "4px",
-                    }}
                   >
                     Update
                   </button>
                   <button
                     onClick={() => handleDelete(category.name)}
-                    style={{
-                      backgroundColor: "#f44336",
-                      color: "white",
-                      border: "none",
-                      padding: "8px 12px",
-                      cursor: "pointer",
-                      borderRadius: "4px",
-                    }}
+                    className="font-bold shadow-lg bg-red-400 m-2 hover:bg-red-500 border-none p-2 rounded-md"
                   >
                     Delete
                   </button>
