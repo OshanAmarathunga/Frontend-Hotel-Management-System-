@@ -47,7 +47,7 @@ export default function Login() {
         <h1 className="text-4xl text-center font-bold text-balck p-[15px] mb-7">Login</h1>
         <input
           placeholder="Enter your email"
-          className="placeholder:text-black px-5 w-[70%] border bg-[#00000000] text-white h-[250px] mb-3"
+          className="placeholder:text-black px-5 w-[70%] border bg-[#00000000] text-black h-[250px] mb-3"
           value={email}
           onChange={(val) => {
             setEmail(val.target.value);
@@ -57,7 +57,7 @@ export default function Login() {
         <input
           type="password"
           placeholder="Enter your password"
-          className="placeholder:text-black rounded-sm px-5 w-[70%] border bg-[#00000000] text-white h-[250px] mb-3"
+          className="placeholder:text-black rounded-sm px-5 w-[70%] border bg-[#00000000] text-black h-[250px] mb-3"
           value={password}
           onChange={(val) => {
             setPassword(val.target.value);

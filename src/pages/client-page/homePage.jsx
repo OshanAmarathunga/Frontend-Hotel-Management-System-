@@ -3,6 +3,9 @@ import Header from "../../components/header/Header";
 import "./style.css";
 import GalleryCards from "./GalleryCards";
 import axios from "axios";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -27,6 +30,14 @@ export default function HomePage() {
         alert("error");
       });
   }, []);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 3
+  };
 
   return (
     <>
@@ -84,6 +95,27 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        
+        <section ref={galleryRef} className="w-full bg-gray-400 py-16 px-8">
+          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
+            Gallery
+          </h2>
+
+          <Slider {...settings}>
+          
+          
+            {galleyItemList.map((each, index) => (
+              <GalleryCards
+                key={index}
+                name={each.name}
+                description={each.description}
+                image={each.image}
+              />
+            ))}
+          
+          </Slider>
+
+        </section>
         <section ref={aboutUsRef} className="w-full bg-gray-100 py-16 px-8">
           <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
             About Us
@@ -96,35 +128,6 @@ export default function HomePage() {
             Discover the beauty, comfort, and unique charm of Ella River Side,
             where your comfort is our priority.
           </p>
-        </section>
-        <section ref={galleryRef} className="w-full bg-gray-400 py-16 px-8">
-          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
-            Gallery
-          </h2>
-
-          {/* Static row for the first four items */}
-          <div className="flex space-x-4 mb-4">
-            {galleyItemList.slice(0, 4).map((each, index) => (
-              <GalleryCards
-                key={index}
-                name={each.name}
-                description={each.description}
-                image={each.image}
-              />
-            ))}
-          </div>
-
-          {/* Scrollable row for the rest */}
-          <div className="flex space-x-4 overflow-x-auto scrollbar-hide">
-            {galleyItemList.slice(4).map((each, index) => (
-              <GalleryCards
-                key={index}
-                name={each.name}
-                description={each.description}
-                image={each.image}
-              />
-            ))}
-          </div>
         </section>
       </div>
     </>
