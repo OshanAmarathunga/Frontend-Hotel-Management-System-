@@ -1,0 +1,15 @@
+.Client-pic-bg{
+    background-image: url('/public/client.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+.scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
