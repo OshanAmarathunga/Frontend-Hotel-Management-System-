@@ -57,10 +57,11 @@ export default function HomePage() {
           slidesToShow: 4,
           slidesToScroll: 4,
         },
-      }
-    ]
-    
-
+      },
+    ],
+    autoplay: true, // Enables auto-scroll
+    autoplaySpeed: 3000, // Time in ms between each scroll (e.g., 3000ms = 3 seconds)
+    pauseOnHover: true,
   };
 
   return (
@@ -70,15 +71,15 @@ export default function HomePage() {
           scrollToAboutUs={scrollToAboutUs}
           scrollToGallery={scrollToGallery}
         />
-        <div className="w-full h-screen  bg-gradient-to-r flex items-center justify-center">
-          <div className="w-[350px] md:w-[600px] h-auto bg-white shadow-lg rounded-lg p-8">
-            <h1 className="text-2xl font-bold text-center text-blue-900 mb-6">
+        <div className="w-full h-full bg-gradient-to-r flex items-center justify-center">
+          <div className="w-[350px] md:w-[600px]  backdrop-blur-lg shadow-lg rounded-2xl p-8">
+            <h1 className="text-[45px] font-bold text-center drop-shadow-xl text-white mb-6">
               Book Your Stay
             </h1>
             <div className="flex flex-col space-y-4">
               {/* Check-in Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-white">
                   Check-in Date
                 </label>
                 <input
@@ -89,7 +90,7 @@ export default function HomePage() {
 
               {/* Check-out Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-white">
                   Check-out Date
                 </label>
                 <input
@@ -100,7 +101,7 @@ export default function HomePage() {
 
               {/* Room Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-white">
                   Room Type
                 </label>
                 <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -119,15 +120,13 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        
-        <section ref={galleryRef} className="w-full bg-gray-400 py-16 px-8">
+
+        <section ref={galleryRef} className="w-full bg-gray-100 py-16 px-8">
           <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
             Gallery
           </h2>
 
           <Slider {...settings}>
-          
-          
             {galleyItemList.map((each, index) => (
               <GalleryCards
                 key={index}
@@ -136,23 +135,26 @@ export default function HomePage() {
                 image={each.image}
               />
             ))}
-          
           </Slider>
-
         </section>
-        <section ref={aboutUsRef} className="w-full bg-gray-100 py-16 px-8">
-          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
-            About Us
-          </h2>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed text-justify">
-            Welcome to Ella River Side, a serene retreat nestled in nature. Our
-            mission is to provide a relaxing, unforgettable experience for each
-            guest. With luxurious amenities, breathtaking views, and exceptional
-            hospitality, we strive to create a memorable stay for every visitor.
-            Discover the beauty, comfort, and unique charm of Ella River Side,
-            where your comfort is our priority.
-          </p>
-        </section>
+        <div className="flex flex-col md:flex-row">
+          <div className="about-us-bg w-full md:w-1/2 rounded-lg m-5">
+              
+          </div>
+          <section ref={aboutUsRef} className="w-full md:w-1/ py-16 px-8">
+            <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
+              About Us
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed text-justify">
+              Welcome to Ella River Side, a serene retreat nestled in nature.
+              Our mission is to provide a relaxing, unforgettable experience for
+              each guest. With luxurious amenities, breathtaking views, and
+              exceptional hospitality, we strive to create a memorable stay for
+              every visitor. Discover the beauty, comfort, and unique charm of
+              Ella River Side, where your comfort is our priority.
+            </p>
+          </section>
+        </div>
       </div>
     </>
   );

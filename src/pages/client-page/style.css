@@ -2,8 +2,9 @@
     background-image: url('/public/client.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
+    background-repeat: repeat-y;
+    min-height: 100vh; 
+   
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -13,3 +14,12 @@
     -ms-overflow-style: none; /* Internet Explorer 10+ */
     scrollbar-width: none; /* Firefox */
   }
+
+  .about-us-bg {
+    background-image: url('/public/about.jpg'); /* Replace with the actual path to your image */
+    background-size: cover; /* Ensures the image covers the entire section */
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    min-height: 300px;
+}
