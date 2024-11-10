@@ -29,15 +29,15 @@ function UserData({scrollToAboutUs,image, scrollToGallery}) {
 
   return (
     <div className="absolute right-0 flex items-center">
-       <button onClick={scrollToGallery}  className="text-sm mr-3 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+       <button onClick={scrollToGallery}  className="text-[10px] md:text-[20px] mr-3 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
           Gallery
         </button>
-        <button onClick={scrollToAboutUs}  className="text-sm mr-3 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+        <button onClick={scrollToAboutUs}  className="text-[10px] md:text-[20px] mr-3 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
           About Us
         </button>
      
       <Link to={"/"}>
-        <button onClick={(e)=>{setSavedToken(localStorage.removeItem("token"))}} className="text-sm mr-3 px-4 py-2 bg-yellow-300 text-black font-medium rounded-md shadow-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+        <button onClick={(e)=>{setSavedToken(localStorage.removeItem("token"))}} className="text-[10px] md:text-[20px] mr-3 px-4 py-2 bg-yellow-300 text-black font-medium rounded-md shadow-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
           LogOut
         </button>
       </Link>
@@ -48,7 +48,7 @@ function UserData({scrollToAboutUs,image, scrollToGallery}) {
         Hi {name}
       </h1>
       <div className="pr-4">
-      <img className="rounded-full w-[80px] h-[80px]" src={image} />
+      <img className="rounded-full hidden md:block w-[80px] h-[80px]" src={image} />
       </div>
       
     </div>

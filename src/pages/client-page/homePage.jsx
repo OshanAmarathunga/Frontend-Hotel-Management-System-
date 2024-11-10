@@ -35,8 +35,32 @@ export default function HomePage() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 3
+    slidesToScroll: 3,
+    responsive: [
+      {
+        breakpoint: 768, // Screen width at which the configuration changes
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1024, // Tablet screens or small desktops
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+        },
+      },
+      {
+        breakpoint: 3000, // Tablet screens or small desktops
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+        },
+      }
+    ]
+    
+
   };
 
   return (
@@ -47,7 +71,7 @@ export default function HomePage() {
           scrollToGallery={scrollToGallery}
         />
         <div className="w-full h-screen  bg-gradient-to-r flex items-center justify-center">
-          <div className="w-full max-w-lg h-auto bg-white shadow-lg rounded-lg p-8">
+          <div className="w-[350px] md:w-[600px] h-auto bg-white shadow-lg rounded-lg p-8">
             <h1 className="text-2xl font-bold text-center text-blue-900 mb-6">
               Book Your Stay
             </h1>

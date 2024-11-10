@@ -9,12 +9,13 @@ import Typography from "@mui/material/Typography";
 export default function GalleryCards(props) {
   return (
     <div className="mx-4" key={props.key}>
-      <Card sx={{ maxWidth: 345, maxHeight: 550 }}>
+      <Card sx={{ maxWidth: {xs:300,sm:345}, maxHeight: { xs: 300, sm: 550} }}>
         <CardMedia
           component="img"
           alt="green iguana"
           height="140"
           image={props.image}
+          
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -25,7 +26,8 @@ export default function GalleryCards(props) {
               color: "text.secondary",
               maxHeight: 100, // Set max height
               overflowY: "auto", // Enable vertical scrollbar,
-              color: "text.secondary"
+              color: "text.secondary",
+              fontSize: { xs: "0.875rem", sm: "1rem" }
             }}
             variant="body2"
             
