@@ -29,10 +29,10 @@ function UserData({scrollToAboutUs,image, scrollToGallery}) {
 
   return (
     <div className="absolute right-0 flex items-center">
-       <button onClick={scrollToGallery}  className="text-[10px] md:text-[20px] mr-3 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+       <button onClick={scrollToGallery}  className="text-[10px] md:text-[20px] mr-3 px-4 py-2  text-black font-medium rounded-md  hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
           Gallery
         </button>
-        <button onClick={scrollToAboutUs}  className="text-[10px] md:text-[20px] mr-3 px-4 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+        <button onClick={scrollToAboutUs}  className="text-[10px] md:text-[20px] mr-3 px-4 py-2  text-black font-medium rounded-md  hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
           About Us
         </button>
      
