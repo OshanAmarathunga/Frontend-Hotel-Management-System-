@@ -20,7 +20,10 @@ export default function Rooms() {
   const [category, setCategory] = useState("");
   const [note, setNote] = useState("");
   const availableOptions = ["Available", "Not Available"];
-  const categoryOptions = ["Luxury", "Delux", "Family", "Couple", "Honeymoon"];
+
+  // const categoryOptions = ["Luxury", "Delux", "Family", "Couple", "Honeymoon"];
+  const [categoryOptions,setCategoryOptionsList]=useState([]);
+
   const [file, setFile] = useState("");
   const [urlList, setUrlList] = useState([]);
   const [roomList, setRoomList] = useState([]);
@@ -114,7 +117,25 @@ export default function Rooms() {
 
   useEffect(() => {
     loadRoomList();
+    loadCategoryList();
   }, []);
+
+  const loadCategoryList=()=>{
+    axios.get(import.meta.env.VITE_BACKEND_URL+"/api/category")
+    .then((rsp)=>{
+      const nameList=[];
+      const categoryList=rsp.data.categories;
+      categoryList.map((each)=>{
+        nameList.push(each.name);
+      })
+
+      setCategoryOptionsList(nameList);
+      
+      
+    }).catch((e)=>{
+      alert("error");
+    })
+  }
 
   const loadRoomList = () => {
     axios

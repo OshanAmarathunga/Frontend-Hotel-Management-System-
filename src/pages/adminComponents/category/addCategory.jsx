@@ -77,6 +77,7 @@ export default function AddCategory() {
         config
       );
       toast.success("Successfully Added this Category");
+      console.log("rsp",rsp);
       clearText();
     } catch (error) {
       console.log(error);
