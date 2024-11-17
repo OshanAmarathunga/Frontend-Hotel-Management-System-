@@ -7,6 +7,13 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Select from "react-select";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -17,6 +24,8 @@ export default function HomePage() {
   const [checkOutDate, setCheckOutDate] = useState("");
   const [category, setCategory] = useState("");
   const [availbleRoomList, setAvailableRoomList] = useState([]);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [bookingList, setBookingList] = useState([]);
 
   const scrollToAboutUs = () => {
     aboutUsRef.current.scrollIntoView({ behavior: "smooth" });
@@ -36,6 +45,7 @@ export default function HomePage() {
         alert("error");
       });
     loadCategoryList();
+    getAllBookings();
   }, []);
 
   const loadCategoryList = () => {
@@ -83,7 +93,6 @@ export default function HomePage() {
   };
 
   function handleFindRooms() {
-    
     const data = {
       start: checkInDate,
       end: checkOutDate,
@@ -96,10 +105,9 @@ export default function HomePage() {
         data
       )
       .then((rsp) => {
-        
-        const receivedRooms=rsp.data.rst;
-        const options = receivedRooms.map((each,index) => ({
-          value: each.name,
+        const receivedRooms = rsp.data.rst;
+        const options = receivedRooms.map((each, index) => ({
+          value: each.roomId,
           label: (
             <div key={each.id || index} className="flex items-center">
               <img
@@ -113,15 +121,58 @@ export default function HomePage() {
             </div>
           ),
         }));
-        setAvailableRoomList(options)
-
+        setAvailableRoomList(options);
       })
       .catch((e) => {
         console.log(e);
       });
   }
 
-  
+  function handleBookNow() {
+    const data = {
+      start: checkInDate,
+      end: checkOutDate,
+      roomId: selectedRoomId,
+    };
+
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    console.log("config", config);
+
+    axios
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/booking/", data, config)
+      .then((rsp) => {
+        getAllBookings();
+      })
+      .catch((e) => {
+        console.log("error");
+      });
+  }
+
+  function getAllBookings() {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .get(
+        import.meta.env.VITE_BACKEND_URL + "/api/booking/getBookings",
+        config
+      )
+      .then((rsp) => {
+        setBookingList(rsp.data.bookings);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
   return (
     <>
@@ -130,9 +181,9 @@ export default function HomePage() {
           scrollToAboutUs={scrollToAboutUs}
           scrollToGallery={scrollToGallery}
         />
-        <div className="w-full h-full bg-gradient-to-r flex items-center justify-center">
-          <div className="w-[350px] md:w-[600px]  backdrop-blur-lg shadow-lg rounded-2xl p-8">
-            <h1 className="text-[45px] font-bold text-center drop-shadow-xl text-white mb-6">
+        <div className="w-full h-[500px] bg-gradient-to-r flex items-center justify-center mb-32">
+          <div className="w-[350px] md:w-[600px]  backdrop-blur-lg shadow-lg rounded-2xl p-5">
+            <h1 className="text-[30px] font-bold text-center drop-shadow-xl text-white mb-2">
               Book Your Stay
             </h1>
             <div className="flex flex-col space-y-4">
@@ -197,20 +248,100 @@ export default function HomePage() {
                 <label className="block text-sm font-medium text-white">
                   Available Rooms
                 </label>
-                
+
                 <Select
                   options={availbleRoomList}
                   className="mt-1 block w-full sm:text-sm"
                   placeholder="Select a room"
+                  onChange={(selectedOption) => {
+                    setSelectedRoomId(selectedOption.value); // Store the RoomId
+                  }}
                 />
               </div>
               <div className="flex justify-center">
-                <button className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <button
+                  onClick={() => {
+                    handleBookNow();
+                  }}
+                  className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
                   Book Now
                 </button>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="px-32 mb-6">
+          <TableContainer component={Paper} className="shadow-lg rounded-lg">
+            <Table
+              sx={{ minWidth: 650 }}
+              size="small"
+              aria-label="booking details table"
+            >
+              <TableHead>
+                <TableRow sx={{ textAlign: "center", background: "#e7e707" }}>
+                  <TableCell sx={{ textAlign: "center" }}>
+                    <strong>Booking ID</strong>
+                  </TableCell>
+                  <TableCell align="center">
+                    <strong>Email</strong>
+                  </TableCell>
+                  <TableCell align="center">
+                    <strong>Check-In Date</strong>
+                  </TableCell>
+                  <TableCell align="center">
+                    <strong>Check-Out Date</strong>
+                  </TableCell>
+                  <TableCell align="center">
+                    <strong>Room ID</strong>
+                  </TableCell>
+                  <TableCell align="center">
+                    <strong>Status</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody sx={{background:"#f8f8a9"}}>
+                {bookingList && bookingList.length > 0 ? (
+                  bookingList.map((row) => (
+                    <TableRow
+                      key={row.bookingId}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.bookingId}
+                      </TableCell>
+                      <TableCell align="center">{row.email}</TableCell>
+                      <TableCell align="center">
+                        {new Date(row.start).toLocaleDateString("en-US", {
+                          weekday: "long", // e.g., Monday
+                          year: "numeric", // e.g., 2024
+                          month: "long", // e.g., November
+                          day: "numeric", // e.g., 23
+                        })}
+                      </TableCell>
+                      <TableCell align="center">
+                        {new Date(row.end).toLocaleDateString("en-US", {
+                          weekday: "long", // e.g., Monday
+                          year: "numeric", // e.g., 2024
+                          month: "long", // e.g., November
+                          day: "numeric", // e.g., 23
+                        })}
+                      </TableCell>
+                      <TableCell align="center">{row.roomId}</TableCell>
+                      <TableCell align="center">{row.status}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      <em>No bookings available</em>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
 
         <section ref={galleryRef} className="w-full bg-gray-100 py-16 px-8">
