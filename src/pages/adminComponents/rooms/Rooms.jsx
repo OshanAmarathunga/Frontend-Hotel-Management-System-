@@ -129,7 +129,7 @@ export default function Rooms() {
         nameList.push(each.name);
       })
 
-      setCategoryOptionsList(nameList);
+        setCategoryOptionsList(nameList);
       
       
     }).catch((e)=>{

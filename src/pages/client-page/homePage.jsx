@@ -32,8 +32,7 @@ export default function HomePage() {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [bookingList, setBookingList] = useState([]);
   const [open, setOpen] = React.useState(false);
-  const [roomavailable,setRoomAvailable]=useState(false);
-  
+  const [roomavailable, setRoomAvailable] = useState(false);
 
   const navigate = useNavigate();
 
@@ -115,6 +114,7 @@ export default function HomePage() {
   };
 
   function handleFindRooms() {
+    
     if ((checkInDate == "") | (checkOutDate == "") | (category == "")) {
       Swal.fire({
         title: "Enter data!",
@@ -136,16 +136,17 @@ export default function HomePage() {
         )
         .then((rsp) => {
           const receivedRooms = rsp.data.rst;
-          if(receivedRooms.length==0){
+          if (receivedRooms.length == 0) {
             handleClose();
             setRoomAvailable(false);
+            setCategory("");
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: "Sorry , Not having any room !",
-              footer: ''
+              footer: "",
             });
-          }else{
+          } else {
             setRoomAvailable(true);
             const options = receivedRooms.map((each, index) => ({
               value: each.roomId,
@@ -164,16 +165,10 @@ export default function HomePage() {
             }));
 
             handleClose();
-            
+
             setAvailableRoomList(options);
             handleClose();
           }
-          
-          
-          
-          
-            
-          
         })
         .catch((e) => {
           console.log(e);
@@ -195,8 +190,6 @@ export default function HomePage() {
       },
     };
 
-    console.log("config", config);
-
     axios
       .post(import.meta.env.VITE_BACKEND_URL + "/api/booking/", data, config)
       .then((rsp) => {
@@ -205,7 +198,7 @@ export default function HomePage() {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Your work has been saved",
+          title: "You have Booked this Room !",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -243,29 +236,31 @@ export default function HomePage() {
     setRoomAvailable(false);
   }
 
-  function handleDelete(bookingID){
+  function handleDelete(bookingID) {
     Swal.fire({
       title: "Are you sure?",
       showDenyButton: false,
       showCancelButton: true,
-      denyButtonText: `Don't save`
+      denyButtonText: `Don't save`,
     }).then((result) => {
-      
       if (result.isConfirmed) {
-        axios.delete(import.meta.env.VITE_BACKEND_URL+"/api/booking/"+bookingID).then((rsp)=>{
-          console.log(rsp);
-          
-          Swal.fire("Deleted !", "", "success");
-          getAllBookings();
-        }).catch((e)=>{
-          console.log("e",e);
-          
-        });
+        axios
+          .delete(
+            import.meta.env.VITE_BACKEND_URL + "/api/booking/" + bookingID
+          )
+          .then((rsp) => {
+            console.log(rsp);
+
+            Swal.fire("Deleted !", "", "success");
+            getAllBookings();
+          })
+          .catch((e) => {
+            console.log("e", e);
+          });
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
       }
     });
-    
   }
 
   return (
@@ -345,34 +340,34 @@ export default function HomePage() {
                   Find Room
                 </button>
               </div>
-              {roomavailable &&
+              {roomavailable && (
                 <div>
-                <label className="block text-sm font-medium text-white">
-                  Available Rooms
-                </label>
+                  <label className="block text-sm font-medium text-white">
+                    Available Rooms
+                  </label>
 
-                <Select
-                  options={availbleRoomList}
-                  className="mt-1 block w-full sm:text-sm"
-                  placeholder="Select a room"
-                  onChange={(selectedOption) => {
-                    setSelectedRoomId(selectedOption.value); // Store the RoomId
-                  }}
-                />
-              </div>
-              }
-              {roomavailable &&
+                  <Select
+                    options={availbleRoomList}
+                    className="mt-1 block w-full sm:text-sm"
+                    placeholder="Select a room"
+                    onChange={(selectedOption) => {
+                      setSelectedRoomId(selectedOption.value); // Store the RoomId
+                    }}
+                  />
+                </div>
+              )}
+              {roomavailable && (
                 <div className="flex justify-center">
-                <button
-                  onClick={() => {
-                    handleBookNow();
-                  }}
-                  className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                  Book Now
-                </button>
-              </div>
-              }
+                  <button
+                    onClick={() => {
+                      handleBookNow();
+                    }}
+                    className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    Book Now
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -439,7 +434,14 @@ export default function HomePage() {
                       <TableCell align="center">{row.roomId}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
                       <TableCell align="center">
-                        <button onClick={()=>{handleDelete(row.bookingId)}} className="bg-red-500 font-bold rounded-sm text-white p-1 shadow-xl hover:bg-red-600">Cancel</button>
+                        <button
+                          onClick={() => {
+                            handleDelete(row.bookingId);
+                          }}
+                          className="bg-red-500 font-bold rounded-sm text-white p-1 shadow-xl hover:bg-red-600"
+                        >
+                          Cancel
+                        </button>
                       </TableCell>
                     </TableRow>
                   ))
