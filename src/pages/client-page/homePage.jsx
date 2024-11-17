@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import Header from "../../components/header/Header";
 import "./style.css";
@@ -15,6 +16,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Swal from "sweetalert2";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -27,10 +31,18 @@ export default function HomePage() {
   const [availbleRoomList, setAvailableRoomList] = useState([]);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [bookingList, setBookingList] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [roomavailable,setRoomAvailable]=useState(false);
+  
 
-  const navigate =useNavigate();
+  const navigate = useNavigate();
 
-
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const scrollToAboutUs = () => {
     aboutUsRef.current.scrollIntoView({ behavior: "smooth" });
@@ -41,25 +53,21 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    
-    
-    if(localStorage.getItem('token')==null){
+    if (localStorage.getItem("token") == null) {
       navigate("/");
-      return
-    }else{
+      return;
+    } else {
       axios
-      .get(import.meta.env.VITE_BACKEND_URL + "/api/gallery")
-      .then((rsp) => {
-        setGalleryItemList(rsp.data.list);
-      })
-      .catch((e) => {
-        alert("error");
-      });
-    loadCategoryList();
-    getAllBookings();
+        .get(import.meta.env.VITE_BACKEND_URL + "/api/gallery")
+        .then((rsp) => {
+          setGalleryItemList(rsp.data.list);
+        })
+        .catch((e) => {
+          alert("error");
+        });
+      loadCategoryList();
+      getAllBookings();
     }
-    
-    
   }, []);
 
   const loadCategoryList = () => {
@@ -107,39 +115,70 @@ export default function HomePage() {
   };
 
   function handleFindRooms() {
-    const data = {
-      start: checkInDate,
-      end: checkOutDate,
-      category: category,
-    };
-
-    axios
-      .post(
-        import.meta.env.VITE_BACKEND_URL + "/api/booking/getAvailbleRooms",
-        data
-      )
-      .then((rsp) => {
-        const receivedRooms = rsp.data.rst;
-        const options = receivedRooms.map((each, index) => ({
-          value: each.roomId,
-          label: (
-            <div key={each.id || index} className="flex items-center">
-              <img
-                src={each.photo[0]}
-                alt="Room"
-                className="w-20 h-20 rounded-lg mr-2"
-              />
-              <span>
-                Room Name: {each.name}, Max Guests: {each.maximumGuests}
-              </span>
-            </div>
-          ),
-        }));
-        setAvailableRoomList(options);
-      })
-      .catch((e) => {
-        console.log(e);
+    if ((checkInDate == "") | (checkOutDate == "") | (category == "")) {
+      Swal.fire({
+        title: "Enter data!",
+        text: "Please select required dates and category !",
+        icon: "question",
       });
+    } else {
+      handleOpen();
+      const data = {
+        start: checkInDate,
+        end: checkOutDate,
+        category: category,
+      };
+
+      axios
+        .post(
+          import.meta.env.VITE_BACKEND_URL + "/api/booking/getAvailbleRooms",
+          data
+        )
+        .then((rsp) => {
+          const receivedRooms = rsp.data.rst;
+          if(receivedRooms.length==0){
+            handleClose();
+            setRoomAvailable(false);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Sorry , Not having any room !",
+              footer: ''
+            });
+          }else{
+            setRoomAvailable(true);
+            const options = receivedRooms.map((each, index) => ({
+              value: each.roomId,
+              label: (
+                <div key={each.id || index} className="flex items-center">
+                  <img
+                    src={each.photo[0]}
+                    alt="Room"
+                    className="w-20 h-20 rounded-lg mr-2"
+                  />
+                  <span>
+                    Room Name: {each.name}, Max Guests: {each.maximumGuests}
+                  </span>
+                </div>
+              ),
+            }));
+
+            handleClose();
+            
+            setAvailableRoomList(options);
+            handleClose();
+          }
+          
+          
+          
+          
+            
+          
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   }
 
   function handleBookNow() {
@@ -162,6 +201,14 @@ export default function HomePage() {
       .post(import.meta.env.VITE_BACKEND_URL + "/api/booking/", data, config)
       .then((rsp) => {
         getAllBookings();
+        clearText();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch((e) => {
         console.log("error");
@@ -188,9 +235,24 @@ export default function HomePage() {
       });
   }
 
+  function clearText() {
+    setCheckInDate("");
+    setCheckOutDate("");
+    setCategory("");
+    setAvailableRoomList([]);
+    setRoomAvailable(false);
+  }
+
   return (
     <>
       <div className="Client-pic-bg w-full h-screen">
+        <Backdrop
+          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+          open={open}
+          onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <Header
           scrollToAboutUs={scrollToAboutUs}
           scrollToGallery={scrollToGallery}
@@ -258,7 +320,8 @@ export default function HomePage() {
                   Find Room
                 </button>
               </div>
-              <div>
+              {roomavailable &&
+                <div>
                 <label className="block text-sm font-medium text-white">
                   Available Rooms
                 </label>
@@ -272,7 +335,9 @@ export default function HomePage() {
                   }}
                 />
               </div>
-              <div className="flex justify-center">
+              }
+              {roomavailable &&
+                <div className="flex justify-center">
                 <button
                   onClick={() => {
                     handleBookNow();
@@ -282,6 +347,7 @@ export default function HomePage() {
                   Book Now
                 </button>
               </div>
+              }
             </div>
           </div>
         </div>
@@ -313,9 +379,12 @@ export default function HomePage() {
                   <TableCell align="center">
                     <strong>Status</strong>
                   </TableCell>
+                  <TableCell align="center">
+                    <strong>Action</strong>
+                  </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody sx={{background:"#f8f8a9"}}>
+              <TableBody sx={{ background: "#f8f8a9" }}>
                 {bookingList && bookingList.length > 0 ? (
                   bookingList.map((row) => (
                     <TableRow
@@ -344,6 +413,9 @@ export default function HomePage() {
                       </TableCell>
                       <TableCell align="center">{row.roomId}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
+                      <TableCell align="center">
+                        <button className="bg-red-500 font-bold rounded-sm text-white p-1 shadow-xl hover:bg-red-600">Cancel</button>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
