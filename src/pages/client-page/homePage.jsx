@@ -243,6 +243,31 @@ export default function HomePage() {
     setRoomAvailable(false);
   }
 
+  function handleDelete(bookingID){
+    Swal.fire({
+      title: "Are you sure?",
+      showDenyButton: false,
+      showCancelButton: true,
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      
+      if (result.isConfirmed) {
+        axios.delete(import.meta.env.VITE_BACKEND_URL+"/api/booking/"+bookingID).then((rsp)=>{
+          console.log(rsp);
+          
+          Swal.fire("Deleted !", "", "success");
+          getAllBookings();
+        }).catch((e)=>{
+          console.log("e",e);
+          
+        });
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
+    
+  }
+
   return (
     <>
       <div className="Client-pic-bg w-full h-screen">
@@ -414,13 +439,13 @@ export default function HomePage() {
                       <TableCell align="center">{row.roomId}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
                       <TableCell align="center">
-                        <button className="bg-red-500 font-bold rounded-sm text-white p-1 shadow-xl hover:bg-red-600">Cancel</button>
+                        <button onClick={()=>{handleDelete(row.bookingId)}} className="bg-red-500 font-bold rounded-sm text-white p-1 shadow-xl hover:bg-red-600">Cancel</button>
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} align="center">
+                    <TableCell colSpan={7} align="center">
                       <em>No bookings available</em>
                     </TableCell>
                   </TableRow>
