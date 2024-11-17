@@ -6,11 +6,17 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Select from "react-select";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
   const galleryRef = useRef(null);
   const [galleyItemList, setGalleryItemList] = useState([]);
+  const [categoryOptions, setCategoryOptionsList] = useState([]);
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
+  const [category, setCategory] = useState("");
+  const [availbleRoomList, setAvailableRoomList] = useState([]);
 
   const scrollToAboutUs = () => {
     aboutUsRef.current.scrollIntoView({ behavior: "smooth" });
@@ -29,7 +35,19 @@ export default function HomePage() {
       .catch((e) => {
         alert("error");
       });
+    loadCategoryList();
   }, []);
+
+  const loadCategoryList = () => {
+    axios
+      .get(import.meta.env.VITE_BACKEND_URL + "/api/category")
+      .then((rsp) => {
+        setCategoryOptionsList(rsp.data.categories);
+      })
+      .catch((e) => {
+        alert("error");
+      });
+  };
 
   const settings = {
     dots: true,
@@ -64,6 +82,47 @@ export default function HomePage() {
     pauseOnHover: true,
   };
 
+  function handleFindRooms() {
+    
+    const data = {
+      start: checkInDate,
+      end: checkOutDate,
+      category: category,
+    };
+
+    axios
+      .post(
+        import.meta.env.VITE_BACKEND_URL + "/api/booking/getAvailbleRooms",
+        data
+      )
+      .then((rsp) => {
+        
+        const receivedRooms=rsp.data.rst;
+        const options = receivedRooms.map((each,index) => ({
+          value: each.name,
+          label: (
+            <div key={each.id || index} className="flex items-center">
+              <img
+                src={each.photo[0]}
+                alt="Room"
+                className="w-20 h-20 rounded-lg mr-2"
+              />
+              <span>
+                Room Name: {each.name}, Max Guests: {each.maximumGuests}
+              </span>
+            </div>
+          ),
+        }));
+        setAvailableRoomList(options)
+
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  
+
   return (
     <>
       <div className="Client-pic-bg w-full h-screen">
@@ -84,6 +143,8 @@ export default function HomePage() {
                 </label>
                 <input
                   type="date"
+                  value={checkInDate}
+                  onChange={(e) => setCheckInDate(e.target.value)}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -95,6 +156,8 @@ export default function HomePage() {
                 </label>
                 <input
                   type="date"
+                  value={checkOutDate}
+                  onChange={(e) => setCheckOutDate(e.target.value)}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -104,14 +167,43 @@ export default function HomePage() {
                 <label className="block text-sm font-medium text-white">
                   Room Type
                 </label>
-                <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                  <option>Luxury</option>
-                  <option>Normal</option>
-                  <option>Simple</option>
+
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                >
+                  <option value="" disabled>
+                    Select category
+                  </option>
+
+                  {categoryOptions &&
+                    categoryOptions.map((each) => <option>{each.name}</option>)}
                 </select>
               </div>
 
               {/* Book Now Button */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => {
+                    handleFindRooms();
+                  }}
+                  className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  Find Room
+                </button>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white">
+                  Available Rooms
+                </label>
+                
+                <Select
+                  options={availbleRoomList}
+                  className="mt-1 block w-full sm:text-sm"
+                  placeholder="Select a room"
+                />
+              </div>
               <div className="flex justify-center">
                 <button className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   Book Now
@@ -123,7 +215,7 @@ export default function HomePage() {
 
         <section ref={galleryRef} className="w-full bg-gray-100 py-16 px-8">
           <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
-            Gallery
+            Find your best vacation plan !
           </h2>
 
           <Slider {...settings}>
@@ -138,9 +230,7 @@ export default function HomePage() {
           </Slider>
         </section>
         <div className="flex flex-col md:flex-row">
-          <div className="about-us-bg w-full md:w-1/2 rounded-lg m-5">
-              
-          </div>
+          <div className="about-us-bg w-full md:w-1/2 rounded-lg m-5"></div>
           <section ref={aboutUsRef} className="w-full md:w-1/ py-16 px-8">
             <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
               About Us
