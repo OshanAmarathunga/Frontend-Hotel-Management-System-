@@ -14,6 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -27,6 +28,10 @@ export default function HomePage() {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [bookingList, setBookingList] = useState([]);
 
+  const navigate =useNavigate();
+
+
+
   const scrollToAboutUs = () => {
     aboutUsRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -36,7 +41,13 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    axios
+    
+    
+    if(localStorage.getItem('token')==null){
+      navigate("/");
+      return
+    }else{
+      axios
       .get(import.meta.env.VITE_BACKEND_URL + "/api/gallery")
       .then((rsp) => {
         setGalleryItemList(rsp.data.list);
@@ -46,6 +57,9 @@ export default function HomePage() {
       });
     loadCategoryList();
     getAllBookings();
+    }
+    
+    
   }, []);
 
   const loadCategoryList = () => {
@@ -181,7 +195,7 @@ export default function HomePage() {
           scrollToAboutUs={scrollToAboutUs}
           scrollToGallery={scrollToGallery}
         />
-        <div className="w-full h-[500px] bg-gradient-to-r flex items-center justify-center mb-32">
+        <div className="w-full h-[500px] bg-gradient-to-r flex items-center justify-center mt-10 mb-32">
           <div className="w-[350px] md:w-[600px]  backdrop-blur-lg shadow-lg rounded-2xl p-5">
             <h1 className="text-[30px] font-bold text-center drop-shadow-xl text-white mb-2">
               Book Your Stay
@@ -272,7 +286,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="px-32 mb-6">
+        <div className="px-3 md:px-32 mb-6">
           <TableContainer component={Paper} className="shadow-lg rounded-lg">
             <Table
               sx={{ minWidth: 650 }}
