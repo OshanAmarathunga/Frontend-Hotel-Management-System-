@@ -22,6 +22,8 @@ import Swal from "sweetalert2";
 import Feedback from "./Feedback";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import "@fontsource/roboto"; // Defaults to 400 weight
+import "@fontsource/roboto/700.css";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -38,6 +40,11 @@ export default function HomePage() {
   const [roomavailable, setRoomAvailable] = useState(false);
 
   const navigate = useNavigate();
+
+  if (localStorage.getItem("token") == null) {
+    navigate("/");
+    return;
+  } 
 
   const handleClose = () => {
     setOpen(false);
@@ -265,6 +272,8 @@ export default function HomePage() {
     });
   }
 
+  function submitFeedback() {}
+
   return (
     <>
       <div className="Client-pic-bg w-full h-screen">
@@ -461,47 +470,8 @@ export default function HomePage() {
           </TableContainer>
         </div>
 
-        <div className="flex flex-col items-center justify-center mb-10 p-10 bg-gray-50">
-          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
-            Tell your valuble feedback with us !
-          </h2>
-          <form className="flex bg-white flex-col items-center gap-6 p-4 sm:p-6  md:px-16 lg:px-32 sm:w-[100%] md:w-[60%]  border border-gray-300 rounded-md shadow-lg ">
-            <Feedback />
-            {/* Feedback Input */}
-            <div className="w-full max-w-lg">
-              <TextField
-                id="feedback"
-                label="Tell us your feedback!"
-                multiline
-                maxRows={2}
-                variant="filled"
-                className="w-full"
-                onChange={(e) => {}}
-              />
-            </div>
-            {/* Name Input */}
-            <div className="w-full max-w-lg">
-              <TextField
-                id="name"
-                label="Your Name"
-                multiline
-                maxRows={4}
-                variant="filled"
-                className="w-full"
-                value={name}
-                onChange={(e) => {}}
-              />
-            </div>
-            {/* Submit Button */}
-            <div className="w-full max-w-lg">
-              <button
-                type="submit"
-                className="w-full bg-yellow-300 text-black py-2 px-4 rounded shadow-md hover:bg-yellow-400"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+        <div className="flex justify-center p-10 bg-gray-50"  >
+          <Feedback />
         </div>
 
         <section ref={galleryRef} className="w-full bg-gray-100 py-16 px-8">
