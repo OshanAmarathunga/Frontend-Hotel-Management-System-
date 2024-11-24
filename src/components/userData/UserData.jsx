@@ -8,6 +8,12 @@ function UserData({scrollToAboutUs,image, scrollToGallery}) {
   const [name,setName]=useState("");
 
   useEffect( ()=>{
+
+    if (localStorage.getItem("token") == null) {
+      navigate("/");
+      return;
+    } else {
+
     const config={
       headers:{
         Authorization:`Bearer ${savedToken}`,
@@ -24,7 +30,7 @@ function UserData({scrollToAboutUs,image, scrollToGallery}) {
         
       });
     }
-  },[]);
+  }},[]);
   
 
   return (
