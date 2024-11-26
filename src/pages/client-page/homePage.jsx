@@ -24,6 +24,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import "@fontsource/roboto"; // Defaults to 400 weight
 import "@fontsource/roboto/700.css";
+import FeedbackCard from "./FeedbackCard";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -38,13 +39,14 @@ export default function HomePage() {
   const [bookingList, setBookingList] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [roomavailable, setRoomAvailable] = useState(false);
+  const [approvedFeedbackList, setApprovedFeedbackList] = useState([]);
 
   const navigate = useNavigate();
 
   if (localStorage.getItem("token") == null) {
     navigate("/");
     return;
-  } 
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -470,7 +472,7 @@ export default function HomePage() {
           </TableContainer>
         </div>
 
-        <div className="flex justify-center p-10 bg-gray-50"  >
+        <div className="flex justify-center p-10 bg-gray-50">
           <Feedback />
         </div>
 
@@ -506,6 +508,21 @@ export default function HomePage() {
             </p>
           </section>
         </div>
+        <section className="bg-gray-100">
+          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
+            Our customer ratings!
+          </h2>
+          {approvedFeedbackList &&
+            approvedFeedbackList.map((each) => (
+              <FeedbackCard
+                key={each._id}
+                rating={each.rate}
+                feedback={each.feedback}
+                name={each.name}
+                date={each.date}
+              />
+            ))}
+        </section>
       </div>
     </>
   );
