@@ -84,7 +84,7 @@ export default function Feedback() {
             <TableHead>
               <TableRow sx={{ background: "#5641be" }}>
                 <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Feedback</TableCell>
+                <TableCell align="center" sx={{width:"400px"}}>Feedback</TableCell>
                 <TableCell align="center">Rate</TableCell>
                 <TableCell align="center">Status</TableCell>
                 <TableCell align="center">Date</TableCell>

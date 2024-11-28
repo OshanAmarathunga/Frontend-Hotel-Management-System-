@@ -20,22 +20,27 @@ const bull = (
 export default function FeedbackCard(prop) {
   return (
     <div className="mx-4">
-      <Card sx={{ minWidth: 275 }}>
+      <Card key={prop.key} sx={{ minWidth: 275, maxHeight:150, overflowY: "auto" }}>
         <CardContent>
           <Stack spacing={1}>
             <Rating
               name="half-rating-read"
-              defaultValue={2.5}
+              defaultValue={4}
               precision={prop.rating}
               readOnly
             />
           </Stack>
 
           <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-            {prop.feedback}
+            "{prop.feedback}"
           </Typography>
           <Typography variant="body2">{prop.name}</Typography>
-          <Typography variant="body2">{prop.date}</Typography>
+          <Typography variant="body2">{new Date(prop.date).toLocaleDateString("en-US", {
+                          weekday: "long", 
+                          month: "long", 
+                          day: "numeric",
+                          year: "numeric", 
+                        })}</Typography>
         </CardContent>
       </Card>
     </div>

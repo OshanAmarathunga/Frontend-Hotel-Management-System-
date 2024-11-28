@@ -40,6 +40,9 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(false);
   const [roomavailable, setRoomAvailable] = useState(false);
   const [approvedFeedbackList, setApprovedFeedbackList] = useState([]);
+  const [rate,setRate]=useState("");
+  const [feedback,setFeedback]=useState("");
+  const [name,setName]=useState("");
 
   const navigate = useNavigate();
 
@@ -78,6 +81,7 @@ export default function HomePage() {
         });
       loadCategoryList();
       getAllBookings();
+      loadAllFeedbacks();
     }
   }, []);
 
@@ -122,6 +126,39 @@ export default function HomePage() {
     ],
     autoplay: true, // Enables auto-scroll
     autoplaySpeed: 3000, // Time in ms between each scroll (e.g., 3000ms = 3 seconds)
+    pauseOnHover: true,
+  };
+
+  const settingsForFeedback = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToScroll: 3,
+    responsive: [
+      {
+        breakpoint: 768, // Screen width at which the configuration changes
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1024, // Tablet screens or small desktops
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 4,
+        },
+      },
+      {
+        breakpoint: 3000, // Tablet screens or small desktops
+        settings: {
+          slidesToShow:3,
+          slidesToScroll: 4,
+        },
+      },
+    ],
+    autoplay: true, // Enables auto-scroll
+    autoplaySpeed: 6000, // Time in ms between each scroll (e.g., 3000ms = 3 seconds)
     pauseOnHover: true,
   };
 
@@ -274,7 +311,18 @@ export default function HomePage() {
     });
   }
 
-  function submitFeedback() {}
+  
+
+  function loadAllFeedbacks(){
+    axios.get(import.meta.env.VITE_BACKEND_URL+'/api/feedback/getApprovedFeedbacks').then((rsp)=>{
+      
+      setApprovedFeedbackList(rsp.data.ApprovedFeedbacks);
+      
+    }).catch((e)=>{
+      console.log(e);
+      
+    })
+  }
 
   return (
     <>
@@ -508,11 +556,12 @@ export default function HomePage() {
             </p>
           </section>
         </div>
-        <section className="bg-gray-100">
+        <section className="bg-gray-100 p-10">
           <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
             Our customer ratings!
           </h2>
-          {approvedFeedbackList &&
+          <Slider {...settingsForFeedback}>
+          {approvedFeedbackList && 
             approvedFeedbackList.map((each) => (
               <FeedbackCard
                 key={each._id}
@@ -522,6 +571,7 @@ export default function HomePage() {
                 date={each.date}
               />
             ))}
+            </Slider>
         </section>
       </div>
     </>
