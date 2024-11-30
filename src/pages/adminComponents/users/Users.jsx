@@ -29,7 +29,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function Users() {
-  const [ userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const options = ["Admin", "Customer"];
   const emailVerifiedOptions = ["Verified", "Not Verified"];
   const userStatusOptions = ["Active", "Disabled"];
@@ -43,10 +43,11 @@ export default function Users() {
   const [email, setEmail] = useState(null);
   const [updateButton, setUpdateButton] = useState(false);
   const [password, setPassword] = useState(null);
-  const [url,setUrl]=useState(null);
-
+  const [url, setUrl] = useState(null);
   const [file, setFile] = useState(null);
-  
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
   const handleFileUpload = async () => {
     if (file) {
       const url = await uploadMedia(file);
@@ -70,13 +71,18 @@ export default function Users() {
 
   useEffect(() => {
     loadUserTable();
-  }, []);
+  }, [page]);
 
   function loadUserTable() {
+    const data = {
+      pageSize: 2,
+      pageNumber: page,
+    };
     axios
-      .get(import.meta.env.VITE_BACKEND_URL + "/api/users")
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/users", data)
       .then((rsp) => {
         setUserList(rsp.data.list);
+        setTotalPages(rsp.data.pageInfo.totalPages);
       })
       .catch((e) => {
         alert(e);
@@ -160,7 +166,7 @@ export default function Users() {
       });
   }
 
-  function saveUser() { 
+  function saveUser() {
     const saveUser = {
       email: email,
       firstName: firstName,
@@ -172,10 +178,10 @@ export default function Users() {
       emailVerified: emailVerified == "Verified" ? true : false,
       email: email,
       password: password,
-      img:url
+      img: url,
     };
 
-    console.log("saveUser : ",saveUser);
+    console.log("saveUser : ", saveUser);
 
     axios
       .post(import.meta.env.VITE_BACKEND_URL + "/api/users", saveUser)
@@ -202,7 +208,6 @@ export default function Users() {
 
   return (
     <div>
-      
       <h1 className="text-blue-800 font-bold pl-10 pt-5 text-[30px] drop-shadow-lg">
         User Management
       </h1>
@@ -219,7 +224,6 @@ export default function Users() {
               id="filled-basic"
               label="First Name"
               variant="filled"
-              
             />
           </div>
           <div className="mb-2">
@@ -298,29 +302,31 @@ export default function Users() {
             />
           </div>
           <div className="mb-2 mt-2">
-            
-            {!file && <label className="px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
-              Choose File
-              <input
-                type="file"
-                className="hidden"
-                onChange={(event) => {
-                  setFile(event.target.files[0]);
-                }}
-              />
-            </label>}
+            {!file && (
+              <label className="px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
+                Choose File
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={(event) => {
+                    setFile(event.target.files[0]);
+                  }}
+                />
+              </label>
+            )}
             {file && <span className="text-sm text-white">{file.name}</span>}
-            {file && <Button
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              startIcon={<CloudUploadIcon />}
-              onClick={() => handleFileUpload()}
-              
-            >
-              Upload User Image
-            </Button>}
+            {file && (
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+                onClick={() => handleFileUpload()}
+              >
+                Upload User Image
+              </Button>
+            )}
           </div>
         </div>
         <div className="w-[20%]">
@@ -481,31 +487,47 @@ export default function Users() {
                     {row.emailVerified ? "Verified" : "Not Verified"}
                   </TableCell>
                   <TableCell align="center">
-                    <div className="flex"><Button
-                      sx={{ bgcolor: "green", m: "2px" }}
-                      variant="contained"
-                      onClick={() => {
-                        updateUser(row);
-                        setUpdateButton(true);
-                      }}
-                    >
-                      Update
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        deleteUser(row);
-                      }}
-                      sx={{ bgcolor: "Red",m: "2px"  }}
-                      variant="contained"
-                    >
-                      Delete
-                    </Button></div>
+                    <div className="flex">
+                      <Button
+                        sx={{ bgcolor: "green", m: "2px" }}
+                        variant="contained"
+                        onClick={() => {
+                          updateUser(row);
+                          setUpdateButton(true);
+                        }}
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          deleteUser(row);
+                        }}
+                        sx={{ bgcolor: "Red", m: "2px" }}
+                        variant="contained"
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <div className="w-full flex justify-center items-center">
+          {Array.from({ length: totalPages }).map((item, index) => {
+            return (
+              <button
+                className={`bg-blue-400 rounded-md mx-2 my-3 px-5 ${page==(index+1)&&"border border-black"}`}
+                onClick={() => {
+                  setPage(index + 1);
+                }}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
