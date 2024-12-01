@@ -17,7 +17,7 @@ export default function GoogleLogin() {
     signInWithPopup(auth, provider)
       .then(async (result) => {
         const token =result.user.accessToken;
-        console.log("token",token);
+        console.log("token");
         
 
         axios
@@ -25,6 +25,8 @@ export default function GoogleLogin() {
             import.meta.env.VITE_BACKEND_URL + "/api/users/googleLogin/" + token
           )
           .then((rsp) => {
+            console.log("rsp");
+            
             Swal.fire({
               title: "Login!",
               text: "Login Successful !",
@@ -39,6 +41,8 @@ export default function GoogleLogin() {
             }
           })
           .catch((e) => {
+            console.log("error");
+            
             Swal.fire(
               "User not Found !, If you have not registered yet, please register!"
             );
