@@ -53,7 +53,7 @@ export default function Registration() {
       password: password
     };
 
-    axios.post("http://localhost:5000/api/users", data)
+    axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users", data)
       .then((res) => {
         console.log(res);
 
