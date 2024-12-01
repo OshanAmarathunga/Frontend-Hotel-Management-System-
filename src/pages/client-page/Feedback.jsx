@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import "@fontsource/roboto"; // Defaults to 400 weight
 import "@fontsource/roboto/700.css";
 import axios from "axios";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const labels = {
   0.5: "Useless",
@@ -28,32 +28,32 @@ export default function Feedback() {
   const [value, setValue] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
 
-  const [feddback,setFeedback]=useState("");
-  const [name,setName]=useState("");
+  const [feddback, setFeedback] = useState("");
+  const [name, setName] = useState("");
 
-  function handleSubmit(){
-    const data={
-        rate:value,
-        feedback:feddback,
-        name:name
-    }
+  function handleSubmit() {
+    const data = {
+      rate: value,
+      feedback: feddback,
+      name: name,
+    };
 
-    axios.post(import.meta.env.VITE_BACKEND_URL+"/api/feedback",data).then((rsp)=>{
-        toast.success('Successfully saved your Feedback !');
+    axios
+      .post(import.meta.env.VITE_BACKEND_URL + "/api/feedback", data)
+      .then((rsp) => {
+        toast.success("Successfully saved your Feedback !");
         setFeedback("");
         setName("");
-        
-    }).catch((e)=>{
+      })
+      .catch((e) => {
         console.log(e);
-        
-    })
-    
+      });
   }
 
   return (
     <div className="border border-b-gray-300 p-6 shadow-lg rounded-md md:w-[75%]">
-        <Toaster />
-      <h2 className="text-4xl font-extrabold text-center text-blue-800 mb-10 tracking-wide font-roboto">
+      <Toaster />
+      <h2 className="text-[25px] md:text-[40px] font-extrabold text-center text-blue-800 mb-10 tracking-wide font-roboto">
         Tell your valuble feedback with us !
       </h2>
       <div className="flex flex-col justify-center items-center gap-4">
@@ -88,8 +88,18 @@ export default function Feedback() {
             variant="filled"
             className="w-full"
             value={feddback}
-            onChange={(e) => {setFeedback(e.target.value)}}
+            onChange={(e) => {
+              const inputText = e.target.value;
+              const wordCount = inputText.trim().split(/\s+/).length;
+
+              if (wordCount <= 30 || inputText.trim() === "") {
+                setFeedback(inputText);
+              }
+            }}
           />
+          <p className="text-sm text-gray-500">
+            {feddback.trim().split(/\s+/).length} / 30 words
+          </p>
         </div>
         {/* Name Input */}
         <div className="w-full max-w-lg">
@@ -101,7 +111,9 @@ export default function Feedback() {
             variant="filled"
             className="w-full"
             value={name}
-            onChange={(e) => {setName(e.target.value)}}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           />
         </div>
         {/* Submit Button */}
@@ -109,7 +121,7 @@ export default function Feedback() {
           <button
             type="submit"
             className="w-full bg-yellow-300 text-black py-2 px-4 rounded shadow-md hover:bg-yellow-400"
-            onClick={(e)=>handleSubmit()}
+            onClick={(e) => handleSubmit()}
           >
             Submit
           </button>

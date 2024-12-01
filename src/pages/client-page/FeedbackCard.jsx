@@ -20,7 +20,7 @@ const bull = (
 export default function FeedbackCard(prop) {
   return (
     <div className="mx-4">
-      <Card key={prop.key} sx={{ minWidth: 275, maxHeight:150, overflowY: "auto" }}>
+      <Card key={prop.key} sx={{ minWidth: 275, maxHeight:200,display: "flex", overflowY: "hidden", background:"#1F2937", borderRadius:"10px" }}>
         <CardContent>
           <Stack spacing={1}>
             <Rating
@@ -31,11 +31,11 @@ export default function FeedbackCard(prop) {
             />
           </Stack>
 
-          <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+          <Typography sx={{ color: "white", mb: 1.5 }}>
             "{prop.feedback}"
           </Typography>
-          <Typography variant="body2">{prop.name}</Typography>
-          <Typography variant="body2">{new Date(prop.date).toLocaleDateString("en-US", {
+          <Typography sx={{ fontWeight: "bold",color: "white"}} variant="body2">{prop.name}</Typography>
+          <Typography sx={{color:"Gray"}} variant="body2">{new Date(prop.date).toLocaleDateString("en-US", {
                           weekday: "long", 
                           month: "long", 
                           day: "numeric",

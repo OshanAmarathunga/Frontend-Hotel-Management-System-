@@ -18,7 +18,7 @@ export default function GalleryCards(props) {
           
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div" sx={{color:"white", background:"red", textAlign:"center"}}>
             {props.name}
           </Typography>
           <Typography
@@ -34,6 +34,7 @@ export default function GalleryCards(props) {
           >
             {props.description}
           </Typography>
+          
         </CardContent>
       </Card>
     </div>

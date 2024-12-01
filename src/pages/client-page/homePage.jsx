@@ -532,7 +532,7 @@ export default function HomePage() {
         </div>
 
         <section ref={galleryRef} className="w-full bg-gray-100 py-16 px-8">
-          <h2 className="text-4xl font-extrabold text-center text-blue-800 mb-10 tracking-wide font-roboto">
+          <h2 className="text-[30px] font-extrabold text-center text-blue-800 mb-10 tracking-wide font-roboto">
             Find your best vacation plan !
           </h2>
 
@@ -548,22 +548,28 @@ export default function HomePage() {
           </Slider>
         </section>
         <div className="flex flex-col md:flex-row">
-          <div className="about-us-bg w-full md:w-1/2 rounded-lg m-5"></div>
+          <div className="about-us-bg sm:w-full md:w-1/2 rounded-lg m-5"></div>
           <section ref={aboutUsRef} className="w-full md:w-1/ py-16 px-8">
-            <h2 className="text-4xl font-extrabold font-roboto text-center text-blue-800 mb-10 tracking-wide">
+            <h2 className="text-[30px] font-extrabold font-roboto text-center text-blue-800 mb-10 tracking-wide">
               About Us
             </h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed text-justify">
-              Welcome to Ella River Side, a serene retreat nestled in nature.
-              Our mission is to provide a relaxing, unforgettable experience for
-              each guest. With luxurious amenities, breathtaking views, and
-              exceptional hospitality, we strive to create a memorable stay for
-              every visitor. Discover the beauty, comfort, and unique charm of
-              Ella River Side, where your comfort is our priority.
-            </p>
+            <div className="bg-gray-50 p-8 rounded-lg shadow-lg">
+              <p className="text-xl font-medium text-gray-800 max-w-3xl mx-auto leading-relaxed text-justify">
+                <span className="block mb-4 text-center text-2xl font-semibold text-blue-900">
+                  Welcome to Ella River Side
+                </span>
+                Nestled in the heart of nature, Ella River Side offers a serene
+                retreat where luxury meets tranquility. Our mission is to
+                provide a relaxing and unforgettable experience for every guest.
+                With world-class amenities, breathtaking views, and exceptional
+                hospitality, we ensure your stay is nothing short of
+                extraordinary. Discover the charm, beauty, and comfort of Ella
+                River Side, where your satisfaction is our priority.
+              </p>
+            </div>
           </section>
         </div>
-        <section className="bg-gray-100 p-10">
+        <section className="bg-gray-200 p-10">
           <h2 className="text-4xl font-roboto font-extrabold text-center text-blue-800 mb-10 tracking-wide">
             <span className="block mb-2 text-gray-600 text-lg font-medium">
               Testimonials
