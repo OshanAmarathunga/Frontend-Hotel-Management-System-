@@ -9,7 +9,11 @@ export default function GoogleLogin() {
   const navigate = useNavigate();
 
   function googleLogin() {
+    console.log("Clicked google login");
+    
     const provider = new GoogleAuthProvider();
+    console.log("provider",provider);
+    
     signInWithPopup(auth, provider)
       .then(async (result) => {
         const token =result.user.accessToken;
