@@ -53,7 +53,7 @@ export default function Feedback() {
   return (
     <div className="border border-b-gray-300 p-6 shadow-lg rounded-md md:w-[75%]">
         <Toaster />
-      <h2 className="text-3xl font-bold text-center text-blue-900 mb-8 font-roboto">
+      <h2 className="text-4xl font-extrabold text-center text-blue-800 mb-10 tracking-wide font-roboto">
         Tell your valuble feedback with us !
       </h2>
       <div className="flex flex-col justify-center items-center gap-4">

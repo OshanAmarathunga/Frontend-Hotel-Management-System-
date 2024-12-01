@@ -25,6 +25,13 @@ import TextField from "@mui/material/TextField";
 import "@fontsource/roboto"; // Defaults to 400 weight
 import "@fontsource/roboto/700.css";
 import FeedbackCard from "./FeedbackCard";
+import { FaFacebookF } from "react-icons/fa";
+import { SlSocialTwitter } from "react-icons/sl";
+import { FaInstagram } from "react-icons/fa6";
+import { RiYoutubeLine } from "react-icons/ri";
+import { CiLinkedin } from "react-icons/ci";
+import { FaPhoneVolume } from "react-icons/fa6";
+import { MdOutlineMail } from "react-icons/md";
 
 export default function HomePage() {
   const aboutUsRef = useRef(null);
@@ -40,9 +47,9 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(false);
   const [roomavailable, setRoomAvailable] = useState(false);
   const [approvedFeedbackList, setApprovedFeedbackList] = useState([]);
-  const [rate,setRate]=useState("");
-  const [feedback,setFeedback]=useState("");
-  const [name,setName]=useState("");
+  const [rate, setRate] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [name, setName] = useState("");
 
   const navigate = useNavigate();
 
@@ -152,7 +159,7 @@ export default function HomePage() {
       {
         breakpoint: 3000, // Tablet screens or small desktops
         settings: {
-          slidesToShow:3,
+          slidesToShow: 3,
           slidesToScroll: 4,
         },
       },
@@ -311,17 +318,17 @@ export default function HomePage() {
     });
   }
 
-  
-
-  function loadAllFeedbacks(){
-    axios.get(import.meta.env.VITE_BACKEND_URL+'/api/feedback/getApprovedFeedbacks').then((rsp)=>{
-      
-      setApprovedFeedbackList(rsp.data.ApprovedFeedbacks);
-      
-    }).catch((e)=>{
-      console.log(e);
-      
-    })
+  function loadAllFeedbacks() {
+    axios
+      .get(
+        import.meta.env.VITE_BACKEND_URL + "/api/feedback/getApprovedFeedbacks"
+      )
+      .then((rsp) => {
+        setApprovedFeedbackList(rsp.data.ApprovedFeedbacks);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   return (
@@ -525,7 +532,7 @@ export default function HomePage() {
         </div>
 
         <section ref={galleryRef} className="w-full bg-gray-100 py-16 px-8">
-          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
+          <h2 className="text-4xl font-extrabold text-center text-blue-800 mb-10 tracking-wide font-roboto">
             Find your best vacation plan !
           </h2>
 
@@ -543,7 +550,7 @@ export default function HomePage() {
         <div className="flex flex-col md:flex-row">
           <div className="about-us-bg w-full md:w-1/2 rounded-lg m-5"></div>
           <section ref={aboutUsRef} className="w-full md:w-1/ py-16 px-8">
-            <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
+            <h2 className="text-4xl font-extrabold font-roboto text-center text-blue-800 mb-10 tracking-wide">
               About Us
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed text-justify">
@@ -557,22 +564,71 @@ export default function HomePage() {
           </section>
         </div>
         <section className="bg-gray-100 p-10">
-          <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">
-            Our customer ratings!
+          <h2 className="text-4xl font-roboto font-extrabold text-center text-blue-800 mb-10 tracking-wide">
+            <span className="block mb-2 text-gray-600 text-lg font-medium">
+              Testimonials
+            </span>
+            Our Customer Ratings
           </h2>
           <Slider {...settingsForFeedback}>
-          {approvedFeedbackList && 
-            approvedFeedbackList.map((each) => (
-              <FeedbackCard
-                key={each._id}
-                rating={each.rate}
-                feedback={each.feedback}
-                name={each.name}
-                date={each.date}
-              />
-            ))}
-            </Slider>
+            {approvedFeedbackList &&
+              approvedFeedbackList.map((each) => (
+                <FeedbackCard
+                  key={each._id}
+                  rating={each.rate}
+                  feedback={each.feedback}
+                  name={each.name}
+                  date={each.date}
+                />
+              ))}
+          </Slider>
         </section>
+        <div className="bg-[#1F2937] p-4 flex flex-col md:flex-row md:justify-between rounded-md">
+          {/* Hotel Details Section */}
+          <div className="text-white w-full md:w-[30%] mb-5 md:mb-0">
+            <div className="text-[20px] sm:text-[25px] md:text-[40px] font-semibold">
+              Hotel Ocean Breez
+            </div>
+            <div className="mt-5">
+              <p className="text-justify">
+                Leonine Villa offers the ultimate beachside escape. Our villa is
+                a sanctuary of relaxation and luxury, with every detail crafted
+                to provide an unforgettable experience.
+              </p>
+            </div>
+            <div className="flex mt-5 gap-4 md:gap-10">
+              <FaFacebookF className="text-[20px] hover:text-[22px]" />
+              <SlSocialTwitter className="text-[20px] hover:text-[22px]" />
+              <FaInstagram className="text-[20px] hover:text-[22px]" />
+              <RiYoutubeLine className="text-[20px] hover:text-[22px]" />
+              <CiLinkedin className="text-[20px] hover:text-[22px]" />
+            </div>
+          </div>
+
+          {/* Contact Section */}
+          <div className="text-white flex flex-col w-full md:w-[30%] mb-5 md:mb-0">
+            <div className="text-[20px] md:text-[30px]">Contact Us</div>
+            <div className="flex mt-5 items-center">
+              <FaPhoneVolume className="mr-2 text-[18px] md:text-[24px]" />
+              <p className="text-[16px] md:text-[20px]">0774872919</p>
+            </div>
+            <div className="flex mt-5 items-center">
+              <MdOutlineMail className="mr-2 text-[18px] md:text-[24px]" />
+              <p className="text-[16px] md:text-[20px]">oceanbrezz@gmail.com</p>
+            </div>
+          </div>
+
+          {/* Map Section */}
+          <div className="w-full md:w-[30%]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126820.27862684363!2d79.87462171678655!3d6.630310653975526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae237c93422aa35%3A0x31cc07423bbaebf!2sWadduwa!5e0!3m2!1sen!2slk!4v1733036170614!5m2!1sen!2slk"
+              className="w-full h-[250px] md:h-[350px]"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
       </div>
     </>
   );

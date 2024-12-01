@@ -28,7 +28,7 @@ export default function AdminBookings() {
  
   return (
     <div className="w-full px-4 py-6">
-      <h1 className="text-2xl font-semibold text-white mb-6">Admin Bookings</h1>
+      <h1 className="text-blue-800 font-bold pt-5 text-[30px] drop-shadow-lg mb-6">Admin Bookings</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full  border bg-gray-100 border-gray-200 shadow-2xl rounded-lg">
           <thead>
