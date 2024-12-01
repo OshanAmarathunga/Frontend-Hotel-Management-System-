@@ -53,7 +53,7 @@ export default function Registration() {
       password: password
     };
 
-    axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users", data)
+    axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users/saveuser", data)
       .then((res) => {
         console.log(res);
 
