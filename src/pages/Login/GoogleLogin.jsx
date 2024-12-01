@@ -71,8 +71,8 @@ export default function GoogleLogin() {
         <CircularProgress color="inherit" />
       </Backdrop>
       <button
-        onClick={()=>{googleLogin
-          handleOpen}
+        onClick={()=>{googleLogin()
+          handleOpen()}
         }
         className="absolute left-[14%] w-[70%] flex items-center justify-center hover:bg-gray-400 bg-white text-white h-[40px] bottom-[35px] rounded-md shadow-md transition duration-300 ease-in-out"
       >
