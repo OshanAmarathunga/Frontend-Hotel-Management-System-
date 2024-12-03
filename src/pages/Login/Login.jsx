@@ -44,7 +44,9 @@ export default function Login() {
   return (
     <div className="w-full h-[100vh] bg-blue-600 pic-bg flex rounded-3xl items-center pl-10">
       <div className="relative w-[700px] h-[400px] backdrop-blur-md rounded-3xl  flex flex-col items-center">
-        <h1 className="text-4xl text-center font-bold text-balck p-[15px] mb-7">Login</h1>
+        <h1 className="text-4xl text-center font-bold text-balck p-[15px] mb-7">
+          Login
+        </h1>
         <input
           placeholder="Enter your email"
           className="placeholder:text-black px-5 w-[70%] border bg-[#00000000] text-black h-[250px] mb-3"
@@ -63,6 +65,12 @@ export default function Login() {
             setPassword(val.target.value);
           }}
         ></input>
+        <div className="flex-col justify-center text-center w-full font-bold">
+          
+            <div>Customer username- customer | password - customer</div>
+            <div>Admin username- admin | password - admin</div>
+          
+        </div>
 
         <div className="relative w-full h-[100vh] ">
           <button
@@ -73,7 +81,7 @@ export default function Login() {
           </button>
         </div>
         <div className="relative w-full h-[100vh]">
-          <GoogleLogin/>
+          <GoogleLogin />
         </div>
 
         <div className="relative w-full h-[100vh] ">
@@ -82,7 +90,6 @@ export default function Login() {
               Register
             </button>
           </Link>
-          
         </div>
       </div>
     </div>
