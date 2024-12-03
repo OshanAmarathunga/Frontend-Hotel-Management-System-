@@ -556,7 +556,7 @@ export default function HomePage() {
             <div className="bg-gray-50 p-8 rounded-lg shadow-lg">
               <p className="text-xl font-medium text-gray-800 max-w-3xl mx-auto leading-relaxed text-justify">
                 <span className="block mb-4 text-center text-2xl font-semibold text-blue-900">
-                  Welcome to Ella River Side
+                  Welcome to Hotel OCEAN BREEZE
                 </span>
                 Nestled in the heart of nature, Ella River Side offers a serene
                 retreat where luxury meets tranquility. Our mission is to
