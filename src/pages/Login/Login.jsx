@@ -19,7 +19,7 @@ export default function Login() {
     };
 
     axios
-      .post("http://localhost:5000/api/users/login", loginData)
+      .post(import.meta.env.VITE_BACKEND_URL+"/api/users/login", loginData)
       .then((result) => {
         Swal.fire({
           title: "Login!",
