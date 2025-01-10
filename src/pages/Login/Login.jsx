@@ -5,14 +5,26 @@ import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import GoogleLogin from "./GoogleLogin";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   function handleLogin() {
+    handleOpen();
     const loginData = {
       email: email,
       password: password,
@@ -21,6 +33,7 @@ export default function Login() {
     axios
       .post(import.meta.env.VITE_BACKEND_URL+"/api/users/login", loginData)
       .then((result) => {
+        handleClose();
         Swal.fire({
           title: "Login!",
           text: "Login Successful !",
@@ -35,6 +48,7 @@ export default function Login() {
         }
       })
       .catch((e) => {
+        handleClose();
         Swal.fire(
           "Invalid login credentials, If you have not registered yet, please register!"
         );
@@ -43,6 +57,13 @@ export default function Login() {
 
   return (
     <div className="w-full h-[100vh] bg-blue-600 pic-bg flex rounded-3xl items-center pl-10">
+      <Backdrop
+        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        open={open}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="relative w-[700px] h-[400px] backdrop-blur-md rounded-3xl  flex flex-col items-center">
         <h1 className="text-4xl text-center font-bold text-balck p-[15px] mb-7">
           Login
