@@ -248,6 +248,8 @@ export default function HomePage() {
     axios
       .post(import.meta.env.VITE_BACKEND_URL + "/api/booking/", data, config)
       .then((rsp) => {
+        
+        
         getAllBookings();
         clearText();
         Swal.fire({
@@ -277,6 +279,7 @@ export default function HomePage() {
       )
       .then((rsp) => {
         setBookingList(rsp.data.bookings);
+        
       })
       .catch((e) => {
         console.log(e);
